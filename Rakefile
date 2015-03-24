@@ -42,3 +42,7 @@ end
 task :terminator => [:init, :powerline_fonts] do
   backup_and_link '~/.config/terminator/config', 'terminator_config'
 end
+
+task :nethack => :init do
+  backup_and_link '~/.nethackrc', 'nethackrc'
+end

@@ -1,0 +1,9 @@
+OPTIONS=name:Marceline
+# ui
+OPTIONS=color,hilite_pet,lit_corridor,DECgraphics
+# controls
+OPTIONS=autodig,!autopickup
+# pet names
+OPTIONS=catname:Martin,dogname:Shiba,horsename:Twilight
+# role & race
+OPTIONS=role:rogue,race:human,gender:female
