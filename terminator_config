@@ -1,30 +1,34 @@
 [global_config]
+  enabled_plugins = InactivityWatch, ActivityWatch, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   focus = system
-  title_transmit_fg_color = "#859900"
+  title_inactive_bg_color = "#002b36"
   title_inactive_fg_color = "#93a1a1"
   title_receive_bg_color = "#268bd2"
-  title_transmit_bg_color = "#073642"
   title_receive_fg_color = "#eee8d5"
-  title_inactive_bg_color = "#002b36"
+  title_transmit_bg_color = "#073642"
+  title_transmit_fg_color = "#859900"
 [keybindings]
-[profiles]
-  [[default]]
-    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
-    login_shell = True
-    background_image = None
-    background_darkness = 0.98
-    background_type = transparent
-    use_system_font = False
-    cursor_color = "#eee8d5"
-    foreground_color = "#839496"
-    font = Liberation Mono for Powerline 11
-    background_color = "#002b36"
+  broadcast_all = None
+  broadcast_group = None
+  broadcast_off = None
 [layouts]
   [[default]]
     [[[child1]]]
-      type = Terminal
       parent = window0
+      type = Terminal
     [[[window0]]]
-      type = Window
       parent = ""
+      type = Window
 [plugins]
+[profiles]
+  [[default]]
+    background_color = "#002b36"
+    background_darkness = 0.98
+    background_image = None
+    background_type = transparent
+    cursor_color = "#eee8d5"
+    font = Liberation Mono for Powerline 11
+    foreground_color = "#839496"
+    login_shell = True
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    use_system_font = False
