@@ -1,5 +1,5 @@
 [global_config]
-  enabled_plugins = InactivityWatch, ActivityWatch, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  enabled_plugins = TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   focus = system
   title_inactive_bg_color = "#002b36"
   title_inactive_fg_color = "#93a1a1"
@@ -11,6 +11,7 @@
   broadcast_all = None
   broadcast_group = None
   broadcast_off = None
+  layout_launcher = None
 [layouts]
   [[default]]
     [[[child1]]]
