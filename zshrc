@@ -7,7 +7,7 @@ DEFAULT_USER=$USER
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting)
+plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting zsh-completions)
 
 # User configuration
 
@@ -60,3 +60,5 @@ export PATH=".cabal-sandbox/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="node_modules/.bin:$PATH"
 export EDITOR=vim
+
+autoload -U compinit && compinit
