@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-export fpath=(~/.zsh/Completion $fpath)
+fpath=($HOME/.zsh/Completion $fpath)
 
 ZSH_THEME="agnoster"
 DEFAULT_USER=$USER
