@@ -7,7 +7,7 @@ DEFAULT_USER=$USER
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting zsh-completions)
+plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting zsh-completions iwhois)
 
 # User configuration
 
