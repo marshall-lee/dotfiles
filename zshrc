@@ -47,6 +47,10 @@ function _spring_command () {
 
 alias spring='_spring_command'
 
+function setgemfile() {
+  export BUNDLE_GEMFILE=$1:A
+}
+
 alias readme='redcarpet-pygments README.md | TERM=xterm-256color elinks'
 
 bindkey -s '\el' 'ls -lAh --color | less -r\n'
