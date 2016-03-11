@@ -53,6 +53,8 @@ function setgemfile() {
 
 alias readme='redcarpet-pygments README.md | TERM=xterm-256color elinks'
 
+alias tmux="tmux -2"
+
 bindkey -s '\el' 'ls -lAh --color | less -r\n'
 
 export TERM=xterm-256color
