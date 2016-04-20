@@ -11,6 +11,7 @@
   broadcast_all = None
   broadcast_group = None
   broadcast_off = None
+  help = None
   layout_launcher = None
 [layouts]
   [[default]]
