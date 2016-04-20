@@ -1,19 +1,15 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-fpath=($HOME/.zsh/Completion $fpath)
 
 ZSH_THEME="agnoster"
 DEFAULT_USER=$USER
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting zsh-completions iwhois)
+plugins=(git archlinux sudo ruby rails mvn fasd postgres zsh-syntax-highlighting zsh-completions iwhois lol)
 
 # User configuration
 
-export PATH="$PATH:/home/marshall/.gem/ruby/2.2.0/bin"
-
-# source /usr/share/bash-completion/bash_completion
 source $ZSH/oh-my-zsh.sh
 
 function _rspec_command () {
