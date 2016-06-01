@@ -1,7 +1,11 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-ZSH_THEME="agnoster"
+if [[ `tty` == /dev/pts/* ]]; then
+  ZSH_THEME="agnoster"
+else
+  ZSH_THEME="sammy"
+fi
 DEFAULT_USER=$USER
 DISABLE_AUTO_UPDATE="true"
 COMPLETION_WAITING_DOTS="true"
