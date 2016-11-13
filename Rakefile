@@ -59,10 +59,17 @@ end
 
 task :omz => :init do
   system 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+
   plugins_path = File.join(Dir.home, '.oh-my-zsh', 'custom', 'plugins')
+  FileUtils.mkdir_p plugins_path
   github_clone 'zsh-users/zsh-syntax-highlighting',
     File.join(plugins_path, 'zsh-syntax-highlighting')
   github_clone 'zsh-users/zsh-completions',
     File.join(plugins_path, 'zsh-completions')
+
+  themes_path = File.join(Dir.home, '.oh-my-zsh', 'custom', 'themes')
+  FileUtils.mkdir_p themes_path
+  backup_and_link File.join(themes_path, 'agnoster.zsh-theme'), 'agnoster.zsh-theme'
+
   backup_and_link '~/.zshrc', 'zshrc'
 end
