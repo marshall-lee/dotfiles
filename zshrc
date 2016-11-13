@@ -1,7 +1,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-if [[ `tty` == /dev/pts/* ]]; then
+if [[ `tty` == /dev/pts/* ]] || [[ `tty` == /dev/ttys* ]]; then
   ZSH_THEME="agnoster"
 else
   ZSH_THEME="sammy"
