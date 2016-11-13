@@ -59,7 +59,10 @@ bindkey -s '\el' 'ls -lAh --color | less -r\n'
 
 export TERM=xterm-256color
 
+eval "$(rbenv init -)"
+
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$PATH:/usr/local/heroku/bin"
 export PATH="$PATH:$HOME/bin"
 export PATH="$HOME/.local/bin:$PATH"
