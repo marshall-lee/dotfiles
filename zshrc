@@ -62,9 +62,10 @@ export TERM=xterm-256color
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="$PATH:/usr/local/heroku/bin"
 export PATH="$PATH:$HOME/bin"
-export PATH=".cabal-sandbox/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="node_modules/.bin:$PATH"
+export PATH=".git/safe/../../.cabal-sandbox/bin:$PATH"
+export PATH=".git/safe/../../node_modules/.bin:$PATH"
+export PATH=".git/safe/../../bin:$PATH"
 export EDITOR=vim
 
 autoload -U compinit && compinit
