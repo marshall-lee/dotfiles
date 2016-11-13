@@ -69,3 +69,6 @@ export PATH=".git/safe/../../bin:$PATH"
 export EDITOR=vim
 
 autoload -U compinit && compinit
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
