@@ -43,6 +43,20 @@ task :init do
   FileUtils.cd(File.dirname(__FILE__))
 end
 
+namespace :git do
+  task :ignore => :init do
+    path = File.join(Dir.home, '.gitignore_global')
+    backup_and_link path, 'gitignore_global'
+    cmd = %w(git config --global core.excludesfile)
+    previous = `#{cmd.join ' '}`.strip
+    if !previous.empty? && previous != path
+      $stderr.puts "WARNING: previous value of core.excludesfile global setting is: #{previous}"
+    end
+    cmd << path
+    system(*cmd)
+  end
+end
+
 task :powerline_fonts => :init do
   github_tmp_clone('powerline/fonts') do
     system './install.sh'
