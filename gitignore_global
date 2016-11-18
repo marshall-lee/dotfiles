@@ -87,3 +87,12 @@ com_crashlytics_export_strings.xml
 
 .agignore
 .ignore
+
+TAGS
+tags
+GPATH
+GRTAGS
+GTAGS
+cscope.files
+cscope.out
+.clang_complete
