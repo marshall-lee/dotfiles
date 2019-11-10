@@ -40,7 +40,7 @@ def github_tmp_clone(str, &block)
 end
 
 task :init do
-  FileUtils.cd(File.dirname(__FILE__))
+  FileUtils.cd(__dir__)
 end
 
 namespace :git do
@@ -71,19 +71,25 @@ task :nethack => :init do
   backup_and_link '~/.nethackrc', 'nethackrc'
 end
 
-task :omz => :init do
-  system 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+task :omz_install => :init do
+  system 'RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+end
 
+task :omz_custom_plugins do
   plugins_path = File.join(Dir.home, '.oh-my-zsh', 'custom', 'plugins')
   FileUtils.mkdir_p plugins_path
-  github_clone 'zsh-users/zsh-syntax-highlighting',
-    File.join(plugins_path, 'zsh-syntax-highlighting')
-  github_clone 'zsh-users/zsh-completions',
-    File.join(plugins_path, 'zsh-completions')
+  github_clone 'zsh-users/zsh-syntax-highlighting', File.join(plugins_path, 'zsh-syntax-highlighting')
+  github_clone 'zsh-users/zsh-completions', File.join(plugins_path, 'zsh-completions')
+end
 
+task :omz_custom_theme do
   themes_path = File.join(Dir.home, '.oh-my-zsh', 'custom', 'themes')
   FileUtils.mkdir_p themes_path
   backup_and_link File.join(themes_path, 'agnoster.zsh-theme'), 'agnoster.zsh-theme'
+end
 
+task :omz_link_config => :init do
   backup_and_link '~/.zshrc', 'zshrc'
 end
+
+task :omz => [:init, :omz_install, :omz_custom_plugins, :omz_custom_theme, :omz_link_config]
