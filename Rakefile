@@ -57,6 +57,7 @@ task :init do
 end
 
 namespace :git do
+  desc 'Installs ~/.gitignore_global'
   task :ignore => :init do
     path = File.join(Dir.home, '.gitignore_global')
     safe_symlink path, 'gitignore_global'
@@ -70,21 +71,25 @@ namespace :git do
   end
 end
 
+desc 'Installs Zsh'
 task :zsh => :init do
   safe_symlink File.join(Dir.home, '.zshrc'), 'zshrc'
   safe_symlink File.join(Dir.home, '.zsh'), 'zsh'
 end
 
+desc 'Installs Powerline fonts'
 task :powerline_fonts => :init do
   github_tmp_clone('powerline/fonts') do
     system './install.sh', exception: true
   end
 end
 
+desc 'Installs Terminator config'
 task :terminator => [:init, :powerline_fonts] do
   safe_symlink '~/.config/terminator/config', 'terminator_config'
 end
 
+desc 'Installs NetHack config'
 task :nethack => :init do
   safe_symlink '~/.nethackrc', 'nethackrc'
 end
