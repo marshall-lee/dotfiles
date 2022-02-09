@@ -7,6 +7,13 @@ def absolute_path(filename)
   File.expand_path(filename, FileUtils.pwd)
 end
 
+def backup(path)
+  stamp = Time.now.strftime '%Y%m%d%H%M%S'
+  dstpath = "#{path}.#{stamp}.save"
+  puts "Backing up #{path} to #{dstpath}"
+  FileUtils.mv path, dstpath
+end
+
 def safe_symlink(path, filename)
   path = File.expand_path(path)
   srcpath = absolute_path(filename)
@@ -22,20 +29,20 @@ def safe_symlink(path, filename)
     need_backup = File.exists? path
     need_link = true
   end
-  if need_backup
-    stamp = Time.now.strftime '%Y%m%d%H%M%S'
-    FileUtils.mv path, "#{path}.#{stamp}.save"
-  end
+  backup path if need_backup
   FileUtils.ln_s srcpath, path if need_link
 end
 
-def git_clone(repo, to)
-  system 'git', 'clone', '--', repo, to, exception: true
+def git_clone(repo, to, branch: nil)
+  cmd = ['git', 'clone']
+  cmd.push '--branch', branch if branch
+  cmd.push '--', repo, to
+  system *cmd, exception: true
 end
 
-def git_tmp_clone(repo, &block)
+def git_tmp_clone(repo, **kwargs, &block)
   Dir.mktmpdir do |tmpdir|
-    git_clone(repo, tmpdir)
+    git_clone(repo, tmpdir, **kwargs)
     FileUtils.cd tmpdir, &block
   end
 end
@@ -44,12 +51,12 @@ def github_url(str)
   "https://github.com/#{str}.git"
 end
 
-def github_clone(str, to)
-  git_clone(github_url(str), to)
+def github_clone(str, to, **kwargs)
+  git_clone(github_url(str), to, **kwargs)
 end
 
-def github_tmp_clone(str, &block)
-  git_tmp_clone(github_url(str), &block)
+def github_tmp_clone(str, **kwargs, &block)
+  git_tmp_clone(github_url(str), **kwargs, &block)
 end
 
 task :init do
@@ -92,6 +99,22 @@ end
 desc 'Installs NetHack config'
 task :nethack => :init do
   safe_symlink '~/.nethackrc', 'nethackrc'
+end
+
+desc 'Installs Spacemacs'
+task :spacemacs => :init do
+  destpath = File.join(Dir.home, '.emacs.d')
+  need_clone = true
+  if File.exists? destpath
+    if Dir.exists? File.join(destpath, 'layers', '+spacemacs')
+      need_clone = false
+      puts 'Spacemacs directory ~/.emacs.d already exists'
+    else
+      puts "Directory ~/.emacs.d exists but it doesn't look like a Spacemacs installation"
+      backup destpath
+    end
+  end
+  github_clone 'syl20bnr/spacemacs', destpath, branch: 'develop' if need_clone
 end
 
 namespace :brew do
