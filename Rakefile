@@ -1,25 +1,30 @@
 require 'fileutils'
 require 'tmpdir'
 
-def backup(path)
-  stamp = Time.now.strftime '%Y%m%d%H%M%S'
-  FileUtils.cp path, "#{path}.#{stamp}.save"
-end
-
 def absolute_path(filename)
   File.expand_path(filename, FileUtils.pwd)
 end
 
-def backup_and_link(path, filename)
+def safe_symlink(path, filename)
   path = File.expand_path(path)
   srcpath = absolute_path(filename)
-  need_backup = begin
-    File.readlink(path) != srcpath
+  begin
+    if File.readlink(path) != srcpath
+      need_backup = true
+      need_link = true
+    else
+      need_backup = false
+      need_link = false
+    end
   rescue Errno::ENOENT, Errno::EINVAL
-    File.exists? path
+    need_backup = File.exists? path
+    need_link = true
   end
-  backup path if need_backup
-  FileUtils.ln_sf srcpath, path
+  if need_backup
+    stamp = Time.now.strftime '%Y%m%d%H%M%S'
+    FileUtils.mv path, "#{path}.#{stamp}.save"
+  end
+  FileUtils.ln_s srcpath, path if need_link
 end
 
 def git_clone(repo, to)
@@ -52,7 +57,7 @@ end
 namespace :git do
   task :ignore => :init do
     path = File.join(Dir.home, '.gitignore_global')
-    backup_and_link path, 'gitignore_global'
+    safe_symlink path, 'gitignore_global'
     cmd = %w(git config --global core.excludesfile)
     previous = `#{cmd.join ' '}`.strip
     if !previous.empty? && previous != path
@@ -63,6 +68,11 @@ namespace :git do
   end
 end
 
+task :zsh => :init do
+  safe_symlink File.join(Dir.home, '.zshrc'), 'zshrc'
+  safe_symlink File.join(Dir.home, '.zsh'), 'zsh'
+end
+
 task :powerline_fonts => :init do
   github_tmp_clone('powerline/fonts') do
     system './install.sh'
@@ -70,9 +80,9 @@ task :powerline_fonts => :init do
 end
 
 task :terminator => [:init, :powerline_fonts] do
-  backup_and_link '~/.config/terminator/config', 'terminator_config'
+  safe_symlink '~/.config/terminator/config', 'terminator_config'
 end
 
 task :nethack => :init do
-  backup_and_link '~/.nethackrc', 'nethackrc'
+  safe_symlink '~/.nethackrc', 'nethackrc'
 end
