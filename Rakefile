@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'tmpdir'
 
@@ -28,7 +30,7 @@ def safe_symlink(path, filename)
 end
 
 def git_clone(repo, to)
-  system 'git', 'clone', '--', repo, to
+  system 'git', 'clone', '--', repo, to, exception: true
 end
 
 def git_tmp_clone(repo, &block)
@@ -64,7 +66,7 @@ namespace :git do
       $stderr.puts "WARNING: previous value of core.excludesfile global setting is: #{previous}"
     end
     cmd << path
-    system(*cmd)
+    system(*cmd, exception: true)
   end
 end
 
@@ -75,7 +77,7 @@ end
 
 task :powerline_fonts => :init do
   github_tmp_clone('powerline/fonts') do
-    system './install.sh'
+    system './install.sh', exception: true
   end
 end
 
