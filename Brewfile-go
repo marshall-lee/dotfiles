@@ -1,0 +1,5 @@
+tap "golangci/tap"
+
+brew "go"
+brew "golangci-lint"
+brew "gopls"

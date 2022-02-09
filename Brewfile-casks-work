@@ -1,0 +1,9 @@
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+
+cask "firefox"
+cask "iterm2"
+cask "keepassxc"
+cask "slack"
+cask "yubico-authenticator"
+cask "zoom"

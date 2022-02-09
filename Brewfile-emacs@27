@@ -1,0 +1,3 @@
+tap "d12frosted/emacs-plus"
+
+brew "d12frosted/emacs-plus/emacs-plus@27", args: ["with-modern-sexy-v2-icon"], link: false
