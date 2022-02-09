@@ -3,7 +3,7 @@ require 'tmpdir'
 
 def backup(path)
   stamp = Time.now.strftime '%Y%m%d%H%M%S'
-  FileUtils.cp path, "#{path}.#{stamp}.save" if File.exists? path
+  FileUtils.cp path, "#{path}.#{stamp}.save"
 end
 
 def absolute_path(filename)
@@ -12,8 +12,14 @@ end
 
 def backup_and_link(path, filename)
   path = File.expand_path(path)
-  backup path
-  FileUtils.ln_sf absolute_path(filename), path
+  srcpath = absolute_path(filename)
+  need_backup = begin
+    File.readlink(path) != srcpath
+  rescue Errno::ENOENT, Errno::EINVAL
+    File.exists? path
+  end
+  backup path if need_backup
+  FileUtils.ln_sf srcpath, path
 end
 
 def git_clone(repo, to)
