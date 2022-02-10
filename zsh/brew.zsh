@@ -21,10 +21,16 @@ function my_brew_init() {
   [[ ! $brew_repo ]] && return
 
   # Cache `brew shellenv` output.
-  shellenv=$shellenv-$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
-  if [[ ! -e $shellenv ]] {
-    echo 'Saving brew shellenv...'
-    $brew_repo/bin/brew shellenv > $shellenv
+  local shellenv_version
+  local shellenv_version_file="${shellenv:h}/.${shellenv:t}-version"
+  [[ -e $shellenv_version_file ]] && shellenv_version=$(<$shellenv_version_file)
+  if [[ ! -e $shellenv || $shellenv(#qN.mh+1) ]] {
+    local shellenv_new_version=$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
+    if [[ $shellenv_new_version != $shellenv_version ]] {
+      echo 'Saving brew shellenv...'
+      echo $shell_new_version > $shellenv_version_file
+      $brew_repo/bin/brew shellenv > $shellenv
+    }
   }
 
   source $shellenv
