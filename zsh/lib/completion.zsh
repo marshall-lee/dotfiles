@@ -10,7 +10,7 @@ zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' use-cache yes
-zstyle ':completion:*' cache-path $ZSH/cache/completion
+zstyle ':completion:*' cache-path $ZSH/cache/zcompcache
 
 # Add a path where custom completions reside.
 my_add_comp_path $ZSH/completions
