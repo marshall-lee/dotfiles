@@ -6,9 +6,10 @@ local dumpfile=$ZSH/cache/zcompdump
 
 # Cache compinit check result for 1 hour.
 # If there're some changes in completions folder then cache is also invalidated.
-if [[ -n $dumpfile(#qN.mh-1) ]] && [[ ! $ZSH/completions -nt $dumpfile ]] {
+[[ $ZSH/completions -nt $dumpfile ]] && rm -f $dumpfile
+if [[ -n $dumpfile(#qN.mh-1) ]] {
   # -C option skips the check and compaudit run
-  compinit -C -d $dumpfile
+  compinit -i -C -d $dumpfile
 } else {
   echo "Checking completions..."
   compinit -i -d $dumpfile
