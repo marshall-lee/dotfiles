@@ -34,7 +34,7 @@ source $shellenv
 local zsh_completions=$HOMEBREW_PREFIX/share/zsh/site-functions
 if [[ -d $zsh_completions ]] {
   chmod -R 755 $zsh_completions
-  fpath=($zsh_completions $fpath)
+  [[ ! ${fpath[(r)$zsh_completions]} ]] && fpath=($zsh_completions $fpath)
 }
 
 function brew-use-keg() {
