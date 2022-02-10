@@ -18,7 +18,7 @@ function my_compinit() {
     # -C option skips the check and compaudit run
     compinit -i -C -d $dumpfile
   } else {
-    echo "Checking completions..."
+    echo "Compiling the completions..."
     compinit -i -d $dumpfile
     touch $dumpfile
     zcompile $dumpfile
