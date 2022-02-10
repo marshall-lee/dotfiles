@@ -13,4 +13,4 @@ zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path $ZSH/cache/completion
 
 # Add a path where custom completions reside.
-fpath=($ZSH/completions $fpath)
+my_add_comp_path $ZSH/completions

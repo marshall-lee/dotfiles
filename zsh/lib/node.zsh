@@ -1,3 +1,7 @@
-(( ! ${+commands[node]} )) && return
+function my_init_node() {
+  (( ! ${+commands[node]} )) && return
 
-link_zsh_completion node
+  my_link_zsh_completion node
+}
+
+my_init_node

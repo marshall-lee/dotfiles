@@ -1,43 +1,45 @@
-setopt local_options
-setopt extendedglob
+function my_brew_init() {
+  setopt local_options
+  setopt extendedglob
+  local brew_repo_arm=/opt/homebrew
+  local brew_repo_x86=/usr/local/Homebrew
+  local brew_repo
+  local shellenv
 
-local brew_repo_arm=/opt/homebrew
-local brew_repo_x86=/usr/local/Homebrew
-local brew_repo
-local shellenv
-
-if [[ -e $brew_repo_arm/bin/brew ]] {
-  # First check arm64 version of Homebrew
-  brew_repo=$brew_repo_arm
-  shellenv=$ZSH/cache/opt-homebrew-shellenv
-  if [[ -e $brew_repo_x86/bin/brew ]] {
-    alias brew-x86='arch -x86_64 /usr/local/bin/brew'
+  if [[ -e $brew_repo_arm/bin/brew ]] {
+    # First check arm64 version of Homebrew
+    brew_repo=$brew_repo_arm
+    shellenv=$ZSH/cache/opt-homebrew-shellenv
+    if [[ -e $brew_repo_x86/bin/brew ]] {
+      alias brew-x86='arch -x86_64 /usr/local/bin/brew'
+    }
+  } elif [[ -e $brew_repo_x86/bin/brew ]] {
+    brew_repo=$brew_repo_x86
+    shellenv=$ZSH/cache/usr-local-Homebrew-shellenv
   }
-} elif [[ -e $brew_repo_x86/bin/brew ]] {
-  brew_repo=$brew_repo_x86
-  shellenv=$ZSH/cache/usr-local-Homebrew-shellenv
-}
 
-if [[ ! $brew_repo ]] {
-  return
-}
+  [[ ! $brew_repo ]] && return
 
-# Cache `brew shellenv` output.
-shellenv=$shellenv-$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
-if [[ ! -e $shellenv ]] {
-  echo 'Saving brew shellenv...'
-  $brew_repo/bin/brew shellenv > $shellenv
-}
+  # Cache `brew shellenv` output.
+  shellenv=$shellenv-$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
+  if [[ ! -e $shellenv ]] {
+    echo 'Saving brew shellenv...'
+    $brew_repo/bin/brew shellenv > $shellenv
+  }
 
-source $shellenv
+  source $shellenv
 
-local zsh_completions=$HOMEBREW_PREFIX/share/zsh/site-functions
-if [[ -d $zsh_completions ]] {
-  chmod -R 755 $zsh_completions
-  [[ ! ${fpath[(r)$zsh_completions]} ]] && fpath=($zsh_completions $fpath)
+  # Track pre-installed completions for compinit caching if they exist in the $fpath.
+  local site_functions=$HOMEBREW_PREFIX/share/zsh/site-functions
+  [[ ${fpath[(r)$site_functions]} ]] && my_add_comp_path $site_functions
 }
 
 function brew-use-keg() {
+  if [[ -z $HOMEBREW_PREFIX ]] {
+    echo 'No Homebrew installation found'
+    return 1
+  }
+
   local dir=$HOMEBREW_PREFIX/opt/$1
   if [[ -d $dir ]] {
     if [[ -d $dir/bin ]] {
@@ -53,6 +55,11 @@ function brew-use-keg() {
 }
 
 function brew-use-keg-dev() {
+  if [[ -z $HOMEBREW_PREFIX ]] {
+    echo 'No Homebrew installation found'
+    return 1
+  }
+
   local dir=$HOMEBREW_PREFIX/opt/$1
   if [[ -d $dir ]] {
     if [[ -d $dir/lib ]] {
@@ -71,3 +78,5 @@ function brew-use-keg-dev() {
     return 1
   }
 }
+
+my_brew_init

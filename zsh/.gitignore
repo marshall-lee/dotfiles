@@ -1,3 +1,4 @@
 cache/
 completions/
 bash-completions/
+*.zwc

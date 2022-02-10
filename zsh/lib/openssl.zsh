@@ -1,3 +1,7 @@
-(( ! ${+commands[openssl]} )) && return
+function my_init_openssl() {
+  (( ! ${+commands[openssl]} )) && return
 
-link_zsh_completion openssl
+  my_link_zsh_completion openssl
+}
+
+my_init_openssl
