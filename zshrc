@@ -1,37 +1,30 @@
 [[ -z "$ZSH" ]] && export ZSH="$HOME/.zsh"
 
-my_comppath=() # Track paths with completion functions separately
-function my_add_comp_path() {
-  [[ ! ${fpath[(r)$1]} ]] && fpath=($1 $fpath)
-  [[ ! ${my_comppath[(r)$1]} ]] && my_comppath=($1 $my_comppath)
-}
-
-# Links something from zsh-users/zsh-completions repo
-function my_link_zsh_completion() {
-  [[ -e $ZSH/completions/_$1 ]] && return
-
-  local comppath
-  if [[ $HOMEBREW_PREFIX && -e $HOMEBREW_PREFIX/share/zsh-completions ]] {
-    comppath=$HOMEBREW_PREFIX/share/zsh-completions
+function my_start() {
+  local my_sources=(
+    $ZSH/lib.zsh
+    $ZSH/brew.zsh
+    $ZSH/init/*.zsh
+    $ZSH/compinit.zsh
+  )
+  local need_compile
+  if [[ -e $ZSH/my.zsh ]] {
+    need_compile=false
+    for src in $my_sources; do
+      if [[ $src -nt $ZSH/my.zsh ]] {
+        need_compile=true
+        break
+      }
+    done
   } else {
-    return
+    need_compile=true
   }
-  ln -s $comppath/_$1 $ZSH/completions/_$1
+  if $need_compile; then
+    echo "Compiling the sources..."
+    cat $my_sources > $ZSH/my.zsh
+    zcompile $ZSH/my.zsh
+  fi
+  source $ZSH/my.zsh
 }
+my_start
 
-# Compiles the file if needed and executes it
-function my_compile() {
-  if [[ ! -e $1.zwc || $1 -nt $1.zwc ]] {
-    zcompile $1
-  } else {
-    return 0
-  }
-}
-
-my_compile $ZSH/brew.zsh && source $ZSH/brew.zsh
-
-for config_file ($ZSH/lib/*.zsh); do
-  my_compile $config_file && source $config_file
-done
-
-my_compile $ZSH/compinit.zsh && source $ZSH/compinit.zsh

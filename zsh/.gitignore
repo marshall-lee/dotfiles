@@ -1,4 +1,5 @@
-cache/
-completions/
-bash-completions/
+/cache/
+/completions/
+/bash-completions/
 *.zwc
+/my.zsh
