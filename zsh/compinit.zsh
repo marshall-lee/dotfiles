@@ -15,3 +15,9 @@ if [[ -n $dumpfile(#qN.mh-1) ]] {
   compinit -i -d $dumpfile
   touch $dumpfile
 }
+
+autoload -Uz bashcompinit && bashcompinit
+
+for comp ($ZSH/bash-completions/*(N)); do
+  source $comp
+done
