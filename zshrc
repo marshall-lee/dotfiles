@@ -6,6 +6,7 @@ function my_start() {
     $ZSH/brew.zsh
     $ZSH/init/*.zsh
     $ZSH/compinit.zsh
+    $ZSH/prompt.zsh
   )
   local need_compile
   if [[ -e $ZSH/my.zsh ]] {
