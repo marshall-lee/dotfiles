@@ -55,12 +55,10 @@ prompt_my_preprompt_render() {
 
   unset prompt_my_async_render_requested
 
-  # TODO: [[ -n ${prompt_my_git_last_dirty_check_timestamp+x} ]] && git_color=$prompt_my_colors[git:branch:cached]
-
   local git_color
-  if [[ $prompt_my_git_dirty == 1 ]] {
+  if [[ $prompt_my_git_untracked == 1 || $prompt_my_git_unstaged == 1 ]] {
     git_color=$prompt_my_colors[git:dirty]
-  } elif [[ $prompt_my_git_dirty == 0 ]] {
+  } elif [[ $prompt_my_git_untracked == 0 && $prompt_my_git_unstaged == 0 ]] {
     git_color=$prompt_my_colors[git:clean]
   } else {
     git_color=default
@@ -81,10 +79,10 @@ prompt_my_preprompt_render() {
     preprompt_parts+=("%F{$git_color}"'${prompt_my_vcs_info[branch]}%f')
   fi
   # Git staged/unstaged changes.
-  if [[ -n $prompt_my_vcs_info[staged] ]]; then
+  if [[ $prompt_my_git_staged == 1 ]]; then
     preprompt_parts+=("%F{$prompt_my_colors[git:staged]}●%f")
   fi
-  if [[ -n $prompt_my_vcs_info[unstaged] ]]; then
+  if [[ $prompt_my_git_unstaged == 1 ]]; then
     preprompt_parts+=("%F{$prompt_my_colors[git:unstaged]}●%f")
   fi
   # Git action (for example, merge).
@@ -157,14 +155,11 @@ prompt_my_async_vcs_info() {
   # to be used or configured as the user pleases.
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' use-simple true
-  # Only export five message variables from `vcs_info`.
-  zstyle ':vcs_info:*' max-exports 5
-  zstyle ':vcs_info:*' check-for-changes true
-  zstyle ':vcs_info:*' stagedstr '1'
-  zstyle ':vcs_info:*' unstagedstr '1'
-  # Export branch (%b), Git toplevel (%R), action (rebase/cherry-pick) (%a) and unstaged/staged changes
-  zstyle ':vcs_info:git*' formats '%b' '%R' '%a' '%u' '%c'
-  zstyle ':vcs_info:git*' actionformats '%b' '%R' '%a' '%u' '%c'
+  # Only export three message variables from `vcs_info`.
+  zstyle ':vcs_info:*' max-exports 3
+  # Export branch (%b), Git toplevel (%R), action (rebase/cherry-pick) (%a)
+  zstyle ':vcs_info:git*' formats '%b' '%R' '%a'
+  zstyle ':vcs_info:git*' actionformats '%b' '%R'
 
   vcs_info
 
@@ -173,22 +168,34 @@ prompt_my_async_vcs_info() {
   info[branch]=$vcs_info_msg_0_
   info[top]=$vcs_info_msg_1_
   info[action]=$vcs_info_msg_2_
-  info[unstaged]=$vcs_info_msg_3_
-  info[staged]=$vcs_info_msg_4_
 
   print -r - ${(@kvq)info}
 }
 
-# Fastest possible way to check if a Git repo is dirty.
-prompt_my_async_git_dirty() {
-  setopt localoptions noshwordsplit
+# Fastest possible way to check if a Git repo has untracked files.
+prompt_my_async_git_untracked() {
   local untracked_git_mode=$(command git config --get status.showUntrackedFiles)
-  if [[ "$untracked_git_mode" != 'no' ]]; then
-    untracked_git_mode='normal'
+  if [[ "$untracked_git_mode" == 'no' ]]; then
+    return 0
   fi
 
-  test -z "$(GIT_OPTIONAL_LOCKS=0 command git status --porcelain --ignore-submodules -u${untracked_git_mode})"
+  test -z "$(command git --no-optional-locks ls-files --exclude-standard --directory --no-empty-directory --others)"
+  return $?
+}
 
+# Fastest possible way to check if a Git repo has staged files.
+prompt_my_async_git_staged() {
+  # Inspired by VCS_INFO_get_data_git
+  if command git rev-parse --quiet --verify HEAD > /dev/null; then
+    command git diff-index --cached --quiet --ignore-submodules=dirty HEAD
+  else
+    command git diff-index --cached --quiet --ignore-submodules=dirty 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+  fi
+  return $?
+}
+
+prompt_my_async_git_unstaged() {
+  command git diff --no-ext-diff --ignore-submodules=dirty --quiet --exit-code
   return $?
 }
 
@@ -234,7 +241,7 @@ prompt_my_async_tasks() {
   # Initialize the async worker.
   prompt_my_async_init
 
-  # Update the current working directory of the async worker.
+  # Update the current working directory of the async workers.
   async_worker_eval "prompt_my" builtin cd -q $PWD
 
   typeset -gA prompt_my_vcs_info
@@ -245,8 +252,9 @@ prompt_my_async_tasks() {
     async_flush_jobs "prompt_my"
 
     # Reset Git preprompt variables, switching working tree.
-    unset prompt_my_git_dirty
-    unset prompt_my_git_last_dirty_check_timestamp
+    unset prompt_my_git_unstaged
+    unset prompt_my_git_staged
+    unset prompt_my_git_untracked
     unset prompt_my_git_arrows
     unset prompt_my_git_stash
     prompt_my_vcs_info[branch]=
@@ -254,7 +262,7 @@ prompt_my_async_tasks() {
   fi
   unset MATCH MBEGIN MEND
 
-  (( $prompt_my_async_enabled )) && async_job "prompt_my" prompt_my_async_vcs_info
+  async_job "prompt_my" prompt_my_async_vcs_info
 
   # Only perform tasks inside a Git working tree.
   [[ -n $prompt_my_vcs_info[top] ]] || return
@@ -267,14 +275,9 @@ prompt_my_async_refresh() {
 
   async_job "prompt_my" prompt_my_async_git_arrows
 
-  # If dirty checking is sufficiently fast,
-  # tell the worker to check it again, or wait for timeout.
-  integer time_since_last_dirty_check=$(( EPOCHSECONDS - ${prompt_my_git_last_dirty_check_timestamp:-0} ))
-  if (( time_since_last_dirty_check > ${PURE_GIT_DELAY_DIRTY_CHECK:-1800} )); then
-    unset prompt_my_git_last_dirty_check_timestamp
-    # Check check if there is anything to pull.
-    async_job "prompt_my" prompt_my_async_git_dirty ${PURE_GIT_UNTRACKED_DIRTY:-1}
-  fi
+  async_job "prompt_my" prompt_my_async_git_staged
+  async_job "prompt_my" prompt_my_async_git_unstaged
+  async_job "prompt_my" prompt_my_async_git_untracked
 
   # If stash is enabled, tell async worker to count stashes
   if zstyle -t ":prompt:my:git:stash" show; then
@@ -357,22 +360,26 @@ prompt_my_async_callback() {
       prompt_my_vcs_info[branch]=$info[branch]
       prompt_my_vcs_info[top]=$info[top]
       prompt_my_vcs_info[action]=$info[action]
-      prompt_my_vcs_info[staged]=$info[staged]
-      prompt_my_vcs_info[unstaged]=$info[unstaged]
 
       do_render=1
       ;;
-    prompt_my_async_git_dirty)
-      local prev_dirty=$prompt_my_git_dirty
-      prompt_my_git_dirty=$code
+    prompt_my_async_git_staged)
+      local prev_staged=$prompt_my_git_staged
+      prompt_my_git_staged=$code
 
-      [[ $prev_dirty != $prompt_my_git_dirty ]] && do_render=1
+      [[ $prev_staged != $prompt_my_git_staged ]] && do_render=1
+      ;;
+    prompt_my_async_git_unstaged)
+      local prev_unstaged=$prompt_my_git_unstaged
+      prompt_my_git_unstaged=$code
 
-      # When `prompt_my_git_last_dirty_check_timestamp` is set, the Git info is displayed
-      # in a different color. To distinguish between a "fresh" and a "cached" result, the
-      # preprompt is rendered before setting this variable. Thus, only upon the next
-      # rendering of the preprompt will the result appear in a different color.
-      (( $exec_time > 5 )) && prompt_my_git_last_dirty_check_timestamp=$EPOCHSECONDS
+      [[ $prev_unstaged != $prompt_my_git_unstaged ]] && do_render=1
+      ;;
+    prompt_my_async_git_untracked)
+      local prev_untracked=$prompt_my_git_untracked
+      prompt_my_git_untracked=$code
+
+      [[ $prev_untracked != $prompt_my_git_untracked ]] && do_render=1
       ;;
     prompt_my_async_git_arrows)
       case $code in
