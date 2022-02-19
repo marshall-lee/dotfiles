@@ -28,8 +28,17 @@ function my_brew_init() {
     local shellenv_new_version=$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
     if [[ $shellenv_new_version != $shellenv_version ]] {
       echo 'Saving brew shellenv...'
-      echo $shell_new_version > $shellenv_version_file
-      $brew_repo/bin/brew shellenv > $shellenv
+      echo $shellenv_new_version > $shellenv_version_file
+
+      HOMEBREW_PREFIX=$($brew_repo/bin/brew --prefix)
+      HOMEBREW_CELLAR=$($brew_repo/bin/brew --cellar)
+      HOMEBREW_REPOSITORY=$($brew_repo/bin/brew --repository)
+      echo "export HOMEBREW_PREFIX=\"$HOMEBREW_PREFIX\"" > $shellenv
+      echo "export HOMEBREW_CELLAR=\"$HOMEBREW_CELLAR\"" >> $shellenv
+      echo "export HOMEBREW_REPOSITORY=\"$HOMEBREW_REPOSITORY\"" >> $shellenv
+      echo "export PATH=\"$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin\${PATH+:\$PATH}\"" >> $shellenv
+      echo "export MANPATH=\"$HOMEBREW_PREFIX/share/man\${MANPATH+:\$MANPATH}:\"" >> $shellenv
+      echo "export INFOPATH=\"$HOMEBREW_PREFIX/share/info:\${INFOPATH:-}\"" >> $shellenv
     }
   }
 
