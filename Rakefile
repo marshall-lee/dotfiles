@@ -101,20 +101,27 @@ task :nethack => :init do
   safe_symlink '~/.nethackrc', 'nethackrc'
 end
 
-desc 'Installs Spacemacs'
-task :spacemacs => :init do
-  destpath = File.join(Dir.home, '.emacs.d')
-  need_clone = true
-  if File.exists? destpath
-    if Dir.exists? File.join(destpath, 'layers', '+spacemacs')
-      need_clone = false
-      puts 'Spacemacs directory ~/.emacs.d already exists'
-    else
-      puts "Directory ~/.emacs.d exists but it doesn't look like a Spacemacs installation"
-      backup destpath
+namespace :spacemacs do
+  desc 'Installs Spacemacs'
+  task :install => :init do
+    destpath = File.join(Dir.home, '.emacs.d')
+    need_clone = true
+    if File.exists? destpath
+      if Dir.exists? File.join(destpath, 'layers', '+spacemacs')
+        need_clone = false
+        puts 'Spacemacs directory ~/.emacs.d already exists'
+      else
+        puts "Directory ~/.emacs.d exists but it doesn't look like a Spacemacs installation"
+        backup destpath
+      end
     end
+    github_clone 'syl20bnr/spacemacs', destpath, branch: 'develop' if need_clone
   end
-  github_clone 'syl20bnr/spacemacs', destpath, branch: 'develop' if need_clone
+
+  desc "Sets up my weird config (don't do this)"
+  task :my => :init do
+    safe_symlink '~/.spacemacs', 'spacemacs'
+  end
 end
 
 namespace :brew do
