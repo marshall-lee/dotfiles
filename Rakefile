@@ -149,6 +149,11 @@ namespace :brew do
     brew_bundle absolute_path('Brewfile')
   end
 
+  desc 'Installs brew casks'
+  task :install_casks do
+    brew_bundle absolute_path('Brewfile-casks')
+  end
+
   # Emacs tasks for installing and managing versions
 
   def brew_link_emacs(version)
