@@ -142,7 +142,7 @@ namespace :brew do
   end
 
   def brew_unlink(formula, skip_errors: false)
-    cmd = "brew unlink #{formula}"
+    cmd = +"brew unlink #{formula}"
     kwargs = { exception: true }
     if skip_errors
       cmd << " 2>/dev/null"
