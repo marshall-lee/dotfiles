@@ -568,6 +568,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    )
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (setq native-comp-async-report-warnings-errors 'silent)
 )
 
 (defun dotspacemacs/user-load ()
