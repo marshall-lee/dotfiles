@@ -68,12 +68,7 @@ This function should only modify configuration layer settings."
      osx
      racket
      protobuf
-     (ruby :variables
-           ruby-version-manager 'rbenv
-           rspec-use-bundler-when-possible nil
-           rspec-use-spring-when-possible t
-           ruby-test-runner 'rspec
-           )
+     ruby
      ruby-on-rails
      rust
      (shell :variables
@@ -569,6 +564,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq native-comp-async-report-warnings-errors 'silent)
+  (setq lsp-solargraph-use-bundler t)
 )
 
 (defun dotspacemacs/user-load ()
