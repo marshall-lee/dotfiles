@@ -18,13 +18,13 @@ function my_brew_init() {
     shellenv=$ZSH/cache/usr-local-Homebrew-shellenv
   }
 
-  [[ ! $brew_repo ]] && return
+  [[ -z $brew_repo ]] && return
 
   # Cache `brew shellenv` output.
   local shellenv_version
   local shellenv_version_file="${shellenv:h}/.${shellenv:t}-version"
   [[ -e $shellenv_version_file ]] && shellenv_version=$(<$shellenv_version_file)
-  if [[ ! -e $shellenv || $shellenv(#qN.mh+1) ]] {
+  if [[ ! -e $shellenv || -n $shellenv(#qN.mh+1) ]] {
     local shellenv_new_version=$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
     if [[ $shellenv_new_version != $shellenv_version ]] {
       echo 'Saving brew shellenv...'
@@ -46,7 +46,7 @@ function my_brew_init() {
 
   # Track pre-installed completions for compinit caching if they exist in the $fpath.
   local site_functions=$HOMEBREW_PREFIX/share/zsh/site-functions
-  [[ ${fpath[(r)$site_functions]} ]] && my_add_comp_path $site_functions
+  [[ -n ${fpath[(r)$site_functions]} ]] && my_add_comp_path $site_functions
 }
 
 function brew-use-keg() {

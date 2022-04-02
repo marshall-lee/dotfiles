@@ -1,7 +1,8 @@
 [[ -z "$ZSH" ]] && export ZSH="$HOME/.zsh"
 
 function my_start() {
-  local my_sources=(
+  local my_sources
+  my_sources=(
     $ZSH/lib.zsh
     $ZSH/brew.zsh
     $ZSH/init/*.zsh
