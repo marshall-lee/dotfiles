@@ -1,7 +1,9 @@
 tap "homebrew/cask"
 tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
 
 cask "firefox"
+cask "font-fira-code"
 cask "iterm2"
 cask "keepassxc"
 cask "slack"
