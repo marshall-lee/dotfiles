@@ -21,28 +21,23 @@ function my_brew_init() {
   [[ -z $brew_repo ]] && return
 
   # Cache `brew shellenv` output.
-  local shellenv_version
-  local shellenv_version_file="${shellenv:h}/.${shellenv:t}-version"
-  [[ -e $shellenv_version_file ]] && shellenv_version=$(<$shellenv_version_file)
   if [[ ! -e $shellenv || -n $shellenv(#qN.mh+1) ]] {
+    local shellenv_version
+    if [[ -e $shellenv ]] {
+      shellenv_version_line=$(head -n 1 $shellenv)
+      shellenv_version=${shellenv_version_line/#\# /}
+    }
     local shellenv_new_version=$(git --work-tree $brew_repo --git-dir $brew_repo/.git rev-parse --short HEAD)
     if [[ $shellenv_new_version != $shellenv_version ]] {
-      echo 'Saving brew shellenv...'
-      echo $shellenv_new_version > $shellenv_version_file
+      echo "Saving brew shellenv... version=${shellenv_new_version}"
 
-      HOMEBREW_PREFIX=$($brew_repo/bin/brew --prefix)
-      HOMEBREW_CELLAR=$($brew_repo/bin/brew --cellar)
-      HOMEBREW_REPOSITORY=$($brew_repo/bin/brew --repository)
-      echo "export HOMEBREW_PREFIX=\"$HOMEBREW_PREFIX\"" > $shellenv
-      echo "export HOMEBREW_CELLAR=\"$HOMEBREW_CELLAR\"" >> $shellenv
-      echo "export HOMEBREW_REPOSITORY=\"$HOMEBREW_REPOSITORY\"" >> $shellenv
-      echo "export PATH=\"$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin\${PATH+:\$PATH}\"" >> $shellenv
-      echo "export MANPATH=\"$HOMEBREW_PREFIX/share/man\${MANPATH+:\$MANPATH}:\"" >> $shellenv
-      echo "export INFOPATH=\"$HOMEBREW_PREFIX/share/info:\${INFOPATH:-}\"" >> $shellenv
+      echo "# $shellenv_new_version" > $shellenv
+      PATH=/usr/bin:/bin:/usr/sbin:/sbin $brew_repo/bin/brew shellenv >> $shellenv
     }
   }
 
   source $shellenv
+  typeset -U path # Remove duplicate /usr/local/{bin,sbin} entries
 
   # Track pre-installed completions for compinit caching if they exist in the $fpath.
   local site_functions=$HOMEBREW_PREFIX/share/zsh/site-functions
