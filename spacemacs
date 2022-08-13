@@ -598,7 +598,7 @@ before packages are loaded."
     :ensure t
     :if (memq window-system '(mac ns x))
     :config
-    (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
+    (setq exec-path-from-shell-variables '("PATH"))
     (exec-path-from-shell-initialize))
   (setq
    ;; solarized-high-contrast-mode-line nil
@@ -616,8 +616,6 @@ before packages are loaded."
    ;; lsp-haskell-process-path-hie "haskell-language-server-wrapper"
    )
   (setup-indentation 2)
-  (add-to-list 'exec-path "~/.local/bin")
-  (add-to-list 'exec-path ".git/safe/../../bin")
   ;; (editorconfig-mode 1)
   (with-eval-after-load 'intero
     (flycheck-add-next-checker 'intero
