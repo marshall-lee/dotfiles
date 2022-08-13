@@ -37,7 +37,7 @@ function my_brew_init() {
   }
 
   source $shellenv
-  typeset -U path # Remove duplicate /usr/local/{bin,sbin} entries
+  typeset -Ux path # Remove duplicate /usr/local/{bin,sbin} entries
 
   # Track pre-installed completions for compinit caching if they exist in the $fpath.
   local site_functions=$HOMEBREW_PREFIX/share/zsh/site-functions
