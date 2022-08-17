@@ -3,3 +3,5 @@
 /bash-completions/
 *.zwc
 /my.zsh
+/pre-init.zsh
+/post-init.zsh
