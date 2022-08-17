@@ -42,7 +42,6 @@ This function should only modify configuration layer settings."
      coq
      (c-c++ :variables
             c-c++-enable-clang-support t
-            c-c++-default-mode-for-headers 'c++-mode
             )
      elixir
      emacs-lisp
@@ -577,7 +576,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq native-comp-async-report-warnings-errors 'silent)
-  (setq lsp-solargraph-use-bundler t)
 )
 
 
@@ -587,6 +585,7 @@ This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
 )
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -617,11 +616,6 @@ before packages are loaded."
    )
   (setup-indentation 2)
   ;; (editorconfig-mode 1)
-  (with-eval-after-load 'intero
-    (flycheck-add-next-checker 'intero
-                              '(warning . haskell-hlint)
-    )
-  )
   (global-set-key (kbd "H-y") 'evil-window-left)
   (global-set-key (kbd "H-M-y") 'evil-unimpaired/next-frame)
   (global-set-key (kbd "H-o") 'evil-window-right)
