@@ -21,7 +21,7 @@ function my_brew_init() {
   [[ -z $brew_repo ]] && return
 
   # Cache `brew shellenv` output.
-  if [[ ! -e $shellenv || -n $shellenv(#qN.mh+1) ]] {
+  if [[ -z $shellenv(#qN.mh-1) ]] {
     local shellenv_version
     if [[ -e $shellenv ]] {
       shellenv_version_line=$(head -n 1 $shellenv)
@@ -33,6 +33,8 @@ function my_brew_init() {
 
       echo "# $shellenv_new_version" > $shellenv
       PATH=/usr/bin:/bin:/usr/sbin:/sbin $brew_repo/bin/brew shellenv >> $shellenv
+    } else {
+      touch $shellenv
     }
   }
 
