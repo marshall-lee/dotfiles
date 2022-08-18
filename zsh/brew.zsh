@@ -33,6 +33,7 @@ function my_brew_init() {
 
       echo "# $shellenv_new_version" > $shellenv
       PATH=/usr/bin:/bin:/usr/sbin:/sbin $brew_repo/bin/brew shellenv >> $shellenv
+      zcompile $shellenv
     } else {
       touch $shellenv
     }
