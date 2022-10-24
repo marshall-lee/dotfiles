@@ -191,10 +191,7 @@ namespace :brew do
     end
 
     desc "Reinstalls Emacs version #{version}"
-    task "reinstall_emacs#{version}" => [:init, :unlink_emacs] do
-      brew_reinstall "emacs-plus@#{version}"
-      brew_link_emacs version
-    end
+    task "reinstall_emacs#{version}" => [:init, :unlink_emacs, :"uninstall_emacs#{version}", :"install_emacs#{version}"]
 
     desc "Uninstalls Emacs version #{version}"
     task "uninstall_emacs#{version}" => :init do
