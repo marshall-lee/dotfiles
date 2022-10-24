@@ -562,6 +562,7 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-env ()
   (setenv "PATH" "/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin")
+  (if (file-directory-p "/opt/homebrew/bin") (setenv "PATH" (concat (getenv "PATH") ":/opt/homebrew/bin")))
 )
 
 (defun dotspacemacs/user-init ()
