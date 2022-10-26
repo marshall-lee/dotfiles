@@ -4,3 +4,4 @@
 .DS_Store
 compile_flags.txt
 *.swp
+cabal.project.local
