@@ -38,6 +38,7 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     agda
      auto-completion
      coq
      (c-c++ :variables
@@ -562,7 +563,12 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-env ()
   (setenv "PATH" "/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin")
-  (if (file-directory-p "/opt/homebrew/bin") (setenv "PATH" (concat (getenv "PATH") ":/opt/homebrew/bin")))
+  (let ((prepend-path
+         (lambda (dir)
+           (if (file-directory-p dir)
+               (setenv "PATH" (concat (expand-file-name dir) ":" (getenv "PATH")))))))
+    (funcall prepend-path "/opt/homebrew/bin")
+    (funcall prepend-path "~/.cabal/bin")) ;; hack for agda-mode
 )
 
 (defun dotspacemacs/user-init ()
