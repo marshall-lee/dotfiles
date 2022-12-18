@@ -1,9 +1,8 @@
-
-my_comppath=() 
+local -U my_comppath
 # Tracks paths with completion functions separately from fpath
 function my_add_comp_path() {
   [[ -z ${fpath[(r)$1]} ]] && fpath=($1 $fpath)
-  [[ -z ${my_comppath[(r)$1]} ]] && my_comppath=($1 $my_comppath)
+  my_comppath=($1 $my_comppath)
 }
 
 # Links something from zsh-users/zsh-completions repo
