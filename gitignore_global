@@ -1,4 +1,4 @@
-.agignore
+.ignore
 .dir-locals.el
 .vscode/
 .DS_Store
