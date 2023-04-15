@@ -583,6 +583,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq native-comp-async-report-warnings-errors 'silent)
+  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 )
 
 
@@ -619,7 +620,7 @@ before packages are loaded."
                            (t . ivy--regex-plus))
    projectile-enable-caching t
    projectile-indexing-method 'alien
-   ;; lsp-haskell-process-path-hie "haskell-language-server-wrapper"
+   lsp-solargraph-multi-root nil
    )
   (setup-indentation 2)
   ;; (editorconfig-mode 1)
