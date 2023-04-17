@@ -77,14 +77,47 @@ function brew-use-keg-dev() {
   if [[ -d $dir ]] {
     if [[ -d $dir/lib ]] {
       export LDFLAGS="-L$dir/lib $LDFLAGS"
+      echo "LDFLAGS=-L$dir/lib $LDFLAGS"
     }
     if [[ -d $dir/include ]] {
       export CPPFLAGS="-I$dir/include $CPPFLAGS"
+      echo "CPPFLAGS=-I$dir/include $CPPFLAGS"
     }
     if [[ -d $dir/lib/pkgconfig ]] {
       local pkg_configs=(${(s/:/)PKG_CONFIG_PATH})
       pkg_configs=($dir/lib/pkgconfig $PKG_CONFIG_PATH)
-      export PKG_CONFIG_PATH=${(j/:/)pkg_configs}
+      local pkg_config_path=${(j/:/)pkg_configs}
+      export PKG_CONFIG_PATH=$pkg_config_path
+      echo "PKG_CONFIG_PATH=$pkg_config_path"
+    }
+  } else {
+    echo "no such directory $dir"
+    return 1
+  }
+}
+
+function brew-x86-use-keg-dev() {
+  if [[ -d /usr/local/Homebrew ]] {
+    echo 'No x86_64 Homebrew installation found'
+    return 1
+  }
+
+  local dir=/usr/local/opt/$1
+  if [[ -d $dir ]] {
+    if [[ -d $dir/lib ]] {
+      export LDFLAGS="-L$dir/lib $LDFLAGS"
+      echo "LDFLAGS=-L$dir/lib $LDFLAGS"
+    }
+    if [[ -d $dir/include ]] {
+      export CPPFLAGS="-I$dir/include $CPPFLAGS"
+      echo "CPPFLAGS=-I$dir/include $CPPFLAGS"
+    }
+    if [[ -d $dir/lib/pkgconfig ]] {
+      local pkg_configs=(${(s/:/)PKG_CONFIG_PATH})
+      pkg_configs=($dir/lib/pkgconfig $PKG_CONFIG_PATH)
+      local pkg_config_path=${(j/:/)pkg_configs}
+      export PKG_CONFIG_PATH=$pkg_config_path
+      echo "PKG_CONFIG_PATH=$pkg_config_path"
     }
   } else {
     echo "no such directory $dir"
