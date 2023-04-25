@@ -7,3 +7,4 @@ compile_flags.txt
 cabal.project.local
 /vendor/bundle
 /.bundle/bin
+.solargraph.yml
