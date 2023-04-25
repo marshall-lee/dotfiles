@@ -1,6 +1,7 @@
 tap "homebrew/core"
 
 brew "fasd"
+brew "fd"
 brew "gh"
 brew "git"
 brew "the_silver_searcher"
