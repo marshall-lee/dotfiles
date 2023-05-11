@@ -60,7 +60,9 @@ This function should only modify configuration layer settings."
      (keyboard-layout :variables
                       kl-layout 'norman)
      (lsp :variables
-          lsp-enable-file-watchers nil)
+          lsp-enable-file-watchers nil
+          lsp-rust-server 'rls
+          )
      markdown
      neotree
      (org :variables
