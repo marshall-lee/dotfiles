@@ -1,0 +1,4 @@
+tap "d12frosted/emacs-plus"
+
+brew "libgccjit"
+brew "d12frosted/emacs-plus/emacs-plus@30", args: ["with-modern-sexy-v2-icon", "with-native-comp"], link: false
