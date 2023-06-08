@@ -97,7 +97,7 @@ function brew-use-keg-dev() {
 }
 
 function brew-x86-use-keg-dev() {
-  if [[ -d /usr/local/Homebrew ]] {
+  if [[ ! -d /usr/local/Homebrew ]] {
     echo 'No x86_64 Homebrew installation found'
     return 1
   }
