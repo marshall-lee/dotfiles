@@ -44,6 +44,9 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-enable-clang-support t
             )
+     (docker :variables
+             docker-dockerfile-backend 'lsp
+             )
      elixir
      emacs-lisp
      fasd
