@@ -1,7 +1,8 @@
 [[ -z "$ZSH" ]] && export ZSH="$HOME/.zsh"
 
 function my_start() {
-  local my_sources=($ZSH/lib.zsh)
+  local -a my_sources
+  my_sources=($ZSH/lib.zsh)
   if [[ -f $ZSH/pre-init.zsh ]] {
     my_sources=($my_sources $ZSH/pre-init.zsh)
   }

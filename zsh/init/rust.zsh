@@ -10,7 +10,7 @@ function my_rustup_init() {
   local cargo_completions=$ZSH/completions/_cargo
   if (( ${+commands[rustup]} )) {
     [[ ! -e $rustup_completions ]] && rustup completions zsh rustup > $rustup_completions
-    if [[ -z $cargo_completions(#qN@mh-1) && ${+commands[rustc]} ]] {
+    if [[ -z $cargo_completions(#qN@mh-1) ]] && (( ${+commands[rustc]} )) {
       rm -f $cargo_completions
       ln -s $(rustc --print sysroot)/share/zsh/site-functions/_cargo $cargo_completions
     }
