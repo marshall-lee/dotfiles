@@ -1,6 +1,7 @@
 tap "homebrew/core"
 
 brew "fasd"
+brew "fswatch"
 brew "fd"
 brew "gh"
 brew "git"
