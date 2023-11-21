@@ -22,7 +22,7 @@ function my_brew_init() {
 
   # Cache `brew shellenv` output.
   if [[ -z $shellenv(#qN.mh-1) ]] {
-    local shellenv_version
+    local shellenv_version_line= shellenv_version=
     if [[ -e $shellenv ]] {
       shellenv_version_line=$(head -n 1 $shellenv)
       shellenv_version=${shellenv_version_line/#\# /}
