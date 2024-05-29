@@ -38,7 +38,7 @@ function git-branch-delete-gone() {
   local current=$(git branch --show-current)
   [[ -z $current ]] && return -1
 
-  local branches=$(git branch --format='%(upstream:track)%(refname:short)' | grep -e "^\[gone\]" | sed "s/^\[gone\]//" | grep -v -e "^${current}$")
+  local branches=$(LC_ALL=C git branch --format='%(upstream:track)%(refname:short)' | grep -e "^\[gone\]" | sed "s/^\[gone\]//" | grep -v -e "^${current}$")
   [[ -z $branches ]] && return 0
 
   if [[ -o interactive ]] {
