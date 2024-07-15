@@ -49,7 +49,6 @@ This function should only modify configuration layer settings."
              )
      elixir
      emacs-lisp
-     fasd
      git
      (go :variables
          go-use-golangci-lint t
