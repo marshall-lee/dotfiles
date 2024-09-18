@@ -54,3 +54,36 @@ function git-branch-delete-gone() {
   echo
   echo ${branches} | xargs -I{} git branch -D {}
 }
+
+function git-submodule-update-hack() {
+  local pathspec=$1
+  [[ -z ${pathspec} ]] && return -1
+
+  local sha1=$2
+  [[ -z ${sha1} ]] && return -1
+
+  git diff --quiet --exit-code ${pathspec}
+  if (( $? )) {
+    echo "You've got some changes at '${pathspec}' in the worktree. See git diff '${pathspec}'."
+    return -1
+  }
+
+  git diff --quiet --cached --exit-code ${pathspec}
+  if (( $? )) {
+    echo "You've got some changes at '${pathspec}' in the index. See git diff --cached '${pathspec}'."
+    return -1
+  }
+
+  git update-index --cacheinfo 160000 ${sha1} ${pathspec}
+  (( $? )) && return -1
+
+  git diff --quiet --exit-code ${pathspec}
+  if (( $? )) {
+    local answer
+    read -q "answer?Do you want to deinit the '${pathspec}' submodule?"
+    if [[ ${answer} == y ]] {
+      git submodule deinit -f ${pathspec}
+      (( $? )) && return -1
+    }
+  }
+}
