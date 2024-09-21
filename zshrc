@@ -8,6 +8,7 @@ function my_start() {
   }
   my_sources=($my_sources
     $ZSH/brew.zsh
+    $ZSH/paths.zsh
     $ZSH/init/*.zsh
     $ZSH/compinit.zsh
     $ZSH/prompt.zsh
