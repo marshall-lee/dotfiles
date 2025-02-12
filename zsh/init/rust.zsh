@@ -1,6 +1,9 @@
 function my_cargo_init() {
   local cargo_env=$HOME/.cargo/env
   [[ -f $cargo_env ]] && source $cargo_env
+
+  local cargo_bin_dir=$HOME/.cargo/bin
+  [[ -d $cargo_bin_dir ]] && path=($cargo_bin_dir $path)
 }
 
 function my_rustup_init() {
