@@ -174,7 +174,7 @@ namespace :brew do
     FileUtils.rm_f "/Applications/Emacs.app"
   end
 
-  emacs_versions = ['28', '29', '30']
+  emacs_versions = ['28', '29', '30', '31']
 
   desc 'Unlinks ALL versions of Emacs'
   task :unlink_emacs => :init do
