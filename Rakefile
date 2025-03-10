@@ -126,7 +126,7 @@ end
 
 namespace :brew do
   def brew_bundle(file)
-    system 'brew', 'bundle', '--no-lock', '--file', file, exception: true
+    system 'brew', 'bundle', '--file', file, exception: true
   end
 
   def brew_uninstall(formula)
