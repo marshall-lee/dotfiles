@@ -169,29 +169,30 @@ namespace :brew do
     FileUtils.ln_sf(File.join(brew_prefix, "Emacs.app"), "/Applications")
   end
 
-  def brew_unlink_emacs(version)
-    brew_unlink "emacs-plus@#{version}"
-    FileUtils.rm_f "/Applications/Emacs.app"
-  end
-
   emacs_versions = ['28', '29', '30', '31']
 
-  desc 'Unlinks ALL versions of Emacs'
-  task :unlink_emacs => :init do
+  define_method(:brew_unlink_emacs) do
     emacs_versions.map do |ver|
       brew_unlink "emacs-plus@#{ver}", skip_errors: true
     end
+    FileUtils.rm_f "/Applications/Emacs.app"
+  end
+
+  desc 'Unlinks ALL versions of Emacs'
+  task :unlink_emacs => :init do
+    brew_unlink_emacs
   end
 
   emacs_versions.each do |version|
     desc "Installs Emacs version #{version}"
-    task "install_emacs#{version}" => [:init, :unlink_emacs] do
+    task "install_emacs#{version}" => [:init] do
       brew_bundle absolute_path("Brewfile-emacs@#{version}")
+      brew_unlink_emacs
       brew_link_emacs version
     end
 
     desc "Reinstalls Emacs version #{version}"
-    task "reinstall_emacs#{version}" => [:init, :unlink_emacs, :"uninstall_emacs#{version}", :"install_emacs#{version}"]
+    task "reinstall_emacs#{version}" => [:init, :"uninstall_emacs#{version}", :"install_emacs#{version}"]
 
     desc "Uninstalls Emacs version #{version}"
     task "uninstall_emacs#{version}" => :init do
@@ -200,12 +201,8 @@ namespace :brew do
 
     desc "Links Emacs version #{version}"
     task "link_emacs#{version}" => :init do
+      brew_unlink_emacs
       brew_link_emacs version
-    end
-
-    desc "Unlinks Emacs version #{version}"
-    task "unlink_emacs#{version}" => :init do
-      brew_unlink_emacs version
     end
   end
 end
