@@ -6,10 +6,10 @@ function rsync-fswatch() {
     return -1
   }
   # Sync all.
-  rsync --delete -vrlpt ${src_path} ${dst_path}
+  rsync -vrlpt ${src_path} ${dst_path}
 
   # Watch for changes & sync.
-  fswatch -o ${src_path} | xargs -I{} rsync --delete -vrlpt ${src_path} ${dst_path}
+  fswatch -o ${src_path} | xargs -I{} rsync -vrlpt ${src_path} ${dst_path}
 }
 
 function rsync-cp() {
