@@ -169,7 +169,7 @@ namespace :brew do
     FileUtils.ln_sf(File.join(brew_prefix, "Emacs.app"), "/Applications")
   end
 
-  emacs_versions = ['28', '29', '30', '31']
+  emacs_versions = ['29', '30', '31']
 
   define_method(:brew_unlink_emacs) do
     emacs_versions.map do |ver|
