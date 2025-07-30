@@ -33,3 +33,48 @@ chars = "\u0001%"
 key = "e"
 mods = "Command|Shift"
 chars = "\u0001\""
+
+[[keyboard.bindings]]
+key = "w"
+mods = "Command"
+chars = "\u0001q"
+
+[[keyboard.bindings]]
+key = "o"
+mods = "Command"
+chars = "\u0001\u001b[C"
+
+[[keyboard.bindings]]
+key = "y"
+mods = "Command"
+chars = "\u0001\u001b[D"
+
+[[keyboard.bindings]]
+key = "n"
+mods = "Command"
+chars = "\u0001\u001b[B"
+
+[[keyboard.bindings]]
+key = "i"
+mods = "Command"
+chars = "\u0001\u001b[A"
+
+[[keyboard.bindings]]
+key = "o"
+mods = "Command|Option"
+action = "SelectNextTab"
+
+[[keyboard.bindings]]
+key = "y"
+mods = "Command|Option"
+action = "SelectPreviousTab"
+
+[[keyboard.bindings]]
+key = "Tab"
+mods = "Control"
+action = "SelectNextTab"
+
+[[keyboard.bindings]]
+key = "Tab"
+mods = "Control|Shift"
+action = "SelectPreviousTab"
