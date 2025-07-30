@@ -26,7 +26,7 @@ def safe_symlink(path, filename)
       need_link = false
     end
   rescue Errno::ENOENT, Errno::EINVAL
-    need_backup = File.exists? path
+    need_backup = File.exist? path
     need_link = true
   end
   backup path if need_backup
@@ -101,13 +101,29 @@ task :nethack => :init do
   safe_symlink '~/.nethackrc', 'nethackrc'
 end
 
+desc 'Installs Alacritty config'
+task :alacritty => :init do
+  config_dir = File.join(Dir.home, '.config', 'alacritty')
+  FileUtils.mkdir_p(config_dir)
+  themes_dir = File.join(config_dir, 'themes')
+  unless Dir.exist?(themes_dir)
+    github_clone 'alacritty/alacritty-theme', themes_dir
+  end
+  safe_symlink File.join(config_dir, 'alacritty.toml'), 'alacritty.toml'
+end
+
+desc 'Installs tmux config'
+task :tmux => :init do
+  safe_symlink File.join(Dir.home, ".tmux.conf"), "tmux.conf"
+end
+
 namespace :spacemacs do
   desc 'Installs Spacemacs'
   task :install => :init do
     destpath = File.join(Dir.home, '.emacs.d')
     need_clone = true
-    if File.exists? destpath
-      if Dir.exists? File.join(destpath, 'layers', '+spacemacs')
+    if File.exist? destpath
+      if Dir.exist? File.join(destpath, 'layers', '+spacemacs')
         need_clone = false
         puts 'Spacemacs directory ~/.emacs.d already exists'
       else

@@ -2,6 +2,7 @@ tap "homebrew/cask"
 tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
 
+cask "alacritty"
 cask "firefox"
 cask "font-fira-code"
 cask "iterm2"
