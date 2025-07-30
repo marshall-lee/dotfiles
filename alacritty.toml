@@ -8,6 +8,7 @@ shell = { program = "zsh", args = ["-l", "-c", "tmux"] }
 
 [window]
 dynamic_padding = true
+dynamic_title = true
 
 [font]
 size = 14.0
