@@ -3,17 +3,33 @@ import = [
     "~/.config/alacritty/themes/themes/solarized_dark.toml"
 ]
 
+[terminal]
+shell = { program = "zsh", args = ["-l", "-c", "tmux"] }
+
+[window]
+dynamic_padding = true
+
 [font]
 size = 14.0
-    
+
 [font.normal]
 family = "Fira Code"
-style = "Regular"
-    
+style = "Light"
+
 [font.bold]
 family = "Fira Code"
-style = "Bold"
-    
+style = "SemiBold"
+
 [font.italic]
 family = "Fira Code"
 style = "Italic"
+
+[[keyboard.bindings]]
+key = "e"
+mods = "Command"
+chars = "\u0001%"
+
+[[keyboard.bindings]]
+key = "e"
+mods = "Command|Shift"
+chars = "\u0001\""
