@@ -9,6 +9,13 @@ shell = { program = "zsh", args = ["-l", "-c", "tmux"] }
 [window]
 dynamic_padding = true
 dynamic_title = true
+option_as_alt = "OnlyLeft"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 0
 
 [font]
 size = 14.0
@@ -79,3 +86,13 @@ action = "SelectNextTab"
 key = "Tab"
 mods = "Control|Shift"
 action = "SelectPreviousTab"
+
+[[keyboard.bindings]]
+key = "f"
+mods = "Command"
+chars = "\u0001[/"
+
+[[keyboard.bindings]]
+key = "i"
+mods = "Control"
+chars = "\u001b[5~"
