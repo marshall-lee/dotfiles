@@ -179,10 +179,16 @@ namespace :brew do
 
   # Emacs tasks for installing and managing versions
 
+  def brew_emacs_app_path(version)
+    brew_prefix = `brew --prefix emacs-plus@#{version}`.strip
+    File.join(brew_prefix, "Emacs.app")
+  end
+
   def brew_link_emacs(version)
     brew_link "emacs-plus@#{version}"
-    brew_prefix = `brew --prefix emacs-plus@#{version}`.strip
-    FileUtils.ln_sf(File.join(brew_prefix, "Emacs.app"), "/Applications")
+    app_path = brew_emacs_app_path(version)
+    puts "Linking #{app_path} to /Applications/#{File.basename(app_path)}"
+    FileUtils.ln_sf(app_path, "/Applications")
   end
 
   emacs_versions = ['29', '30', '31']
@@ -205,6 +211,13 @@ namespace :brew do
       brew_bundle absolute_path("Brewfile-emacs@#{version}")
       brew_unlink_emacs
       brew_link_emacs version
+
+      # See https://github.com/d12frosted/homebrew-emacs-plus/issues/742
+      if RbConfig::CONFIG["host_cpu"] == "x86_64"
+        app_path = brew_emacs_app_path(version)
+        puts "Signing the app #{app_path}"
+        system "sudo", "codesign", "--force", "--deep", "--sign", "-", app_path
+      end
     end
 
     desc "Reinstalls Emacs version #{version}"
