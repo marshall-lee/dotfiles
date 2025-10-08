@@ -13,12 +13,10 @@ function rsync-fswatch() {
 }
 
 function rsync-cp() {
-  local src_path=$1
-  local dst_path=$2
-  if [[ -z $src_path || -z $dst_path ]] {
-    echo "Usage: rsync-cp <src-path> <dst-path>" >&2
+  if (( $# < 2 )) {
+    echo "Usage: rsync-cp [opt...] <src-path>... <dst-path>" >&2
     return -1
   }
 
-  rsync -vrlp ${src_path} ${dst_path}
+  rsync -vrlp "$@"
 }
