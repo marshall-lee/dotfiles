@@ -1,5 +1,5 @@
 function git-remote-head() {
-  local remote=${1:-$(git branch --format='%(upstream:remotename)')}
+  local remote=${1:-$(git for-each-ref --format='%(upstream:remotename)' $(git symbolic-ref -q HEAD))}
   local symref=refs/remotes/${remote}/HEAD
   local ref=$(git symbolic-ref ${symref} | sed "s@^refs/remotes/${remote}/@@")
   if [[ -z $ref ]] {
@@ -12,7 +12,7 @@ function git-remote-head() {
 }
 
 function git-branch-delete-merged() {
-  local remote=${1:-$(git branch --format='%(upstream:remotename)')}
+  local remote=${1:-$(git for-each-ref --format='%(upstream:remotename)' $(git symbolic-ref -q HEAD))}
 
   local head=$(git-remote-head ${remote})
   [[ -z $head ]] && return -1
