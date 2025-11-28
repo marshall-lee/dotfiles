@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(haskell
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -44,6 +44,7 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-enable-clang-support t
             )
+     csv
      (docker :variables
              docker-dockerfile-backend 'lsp
              )
@@ -66,6 +67,7 @@ This function should only modify configuration layer settings."
           )
      markdown
      neotree
+     nginx
      (org :variables
           org-enable-github-support t)
      osx
