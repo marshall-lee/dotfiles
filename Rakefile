@@ -211,13 +211,6 @@ namespace :brew do
       brew_bundle absolute_path("Brewfile-emacs@#{version}")
       brew_unlink_emacs
       brew_link_emacs version
-
-      # See https://github.com/d12frosted/homebrew-emacs-plus/issues/742
-      if RbConfig::CONFIG["host_cpu"] == "x86_64"
-        app_path = brew_emacs_app_path(version)
-        puts "Signing the app #{app_path}"
-        system "sudo", "codesign", "--force", "--deep", "--sign", "-", app_path
-      end
     end
 
     desc "Reinstalls Emacs version #{version}"
