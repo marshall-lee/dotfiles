@@ -9,7 +9,7 @@ shell = { program = "zsh", args = ["-l", "-c", "tmux"] }
 [window]
 dynamic_padding = true
 dynamic_title = true
-option_as_alt = "OnlyLeft"
+option_as_alt = "Both"
 
 [mouse]
 hide_when_typing = true
