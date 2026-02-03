@@ -144,6 +144,9 @@ prompt_my_precmd() {
   # Perform async Git dirty check.
   (( $prompt_my_async_enabled )) && prompt_my_async_tasks
 
+  # Make sure VIM prompt is reset.
+  prompt_my_reset_prompt_symbol
+
   # Print the preprompt.
   prompt_my_preprompt_render "precmd"
 }
@@ -431,6 +434,29 @@ prompt_my_reset_prompt() {
   zle && zle .reset-prompt
 }
 
+prompt_my_reset_prompt_symbol() {
+  prompt_my_state[prompt]=${PURE_PROMPT_SYMBOL:-❯}
+}
+
+prompt_my_update_vim_prompt_widget() {
+  setopt localoptions noshwordsplit
+  prompt_my_state[prompt]=${${KEYMAP/vicmd/${PURE_PROMPT_VICMD_SYMBOL:-❮}}/(main|viins)/${PURE_PROMPT_SYMBOL:-❯}}
+
+  prompt_my_reset_prompt
+}
+
+prompt_my_reset_vim_prompt_widget() {
+  setopt localoptions noshwordsplit
+  prompt_my_reset_prompt_symbol
+
+  # We can't perform a prompt reset at this point because it
+  # removes the prompt marks inserted by macOS Terminal.
+}
+
+prompt_my_switch_to_vicmd() {
+  zle vi-add-eol
+}
+
 prompt_my_state_setup() {
   setopt localoptions noshwordsplit
 
@@ -538,9 +564,16 @@ prompt_my_setup() {
   prompt_my_state_setup
 
   zle -N prompt_my_reset_prompt
+  zle -N prompt_my_update_vim_prompt_widget
+  zle -N prompt_my_reset_vim_prompt_widget
+  if (( $+functions[add-zle-hook-widget] )); then
+    add-zle-hook-widget zle-line-finish prompt_my_reset_vim_prompt_widget
+    add-zle-hook-widget zle-keymap-select prompt_my_update_vim_prompt_widget
+    # add-zle-hook-widget zle-isearch-exit prompt_my_switch_to_vicmd
+  fi
 
   # Prompt turns red if the previous command didn't exit with 0.
-  PROMPT='%(?.%F{$prompt_my_colors[prompt:success]}.%F{$prompt_my_colors[prompt:error]})❯%f '
+  PROMPT='%(?.%F{$prompt_my_colors[prompt:success]}.%F{$prompt_my_colors[prompt:error]})${prompt_my_state[prompt]}%f '
 
   # Indicate continuation prompt by … and use a darker color for it.
   PROMPT2='%F{$prompt_my_colors[prompt:continuation]}… %(1_.%_ .%_)%f'$prompt_indicator

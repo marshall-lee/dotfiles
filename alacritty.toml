@@ -32,37 +32,37 @@ style = "SemiBold"
 family = "Fira Code"
 style = "Italic"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+e -> C-a % (split-window -h in tmux)
 key = "e"
 mods = "Command"
 chars = "\u0001%"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+shift+e -> C-a " (split-window -v in tmux)
 key = "e"
 mods = "Command|Shift"
 chars = "\u0001\""
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+w -> C-a q (kill-pane in tmux)
 key = "w"
 mods = "Command"
 chars = "\u0001q"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+n -> C-a Right
 key = "o"
 mods = "Command"
 chars = "\u0001\u001b[C"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+n -> C-a Left
 key = "y"
 mods = "Command"
 chars = "\u0001\u001b[D"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+n -> C-a Down
 key = "n"
 mods = "Command"
 chars = "\u0001\u001b[B"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+i -> C-a Up
 key = "i"
 mods = "Command"
 chars = "\u0001\u001b[A"
@@ -87,12 +87,12 @@ key = "Tab"
 mods = "Control|Shift"
 action = "SelectPreviousTab"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+f -> M-s (search-backward in tmux)
 key = "f"
 mods = "Command"
-chars = "\u0001[/"
+chars = "\u001bs"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # ctrl+i -> PgUp (up-line-or-beginning-search in zsh)
 key = "i"
 mods = "Control"
 chars = "\u001b[5~"
