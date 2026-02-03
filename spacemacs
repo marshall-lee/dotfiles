@@ -73,7 +73,7 @@ This function should only modify configuration layer settings."
      osx
      racket
      protobuf
-     ruby
+     (ruby :variables ruby-backend 'lsp)
      ruby-on-rails
      rust
      (shell :variables
