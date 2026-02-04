@@ -208,6 +208,10 @@ namespace :brew do
   emacs_versions.each do |version|
     desc "Installs Emacs version #{version}"
     task "install_emacs#{version}" => [:init] do
+      config_dir = File.join(Dir.home, '.config', 'emacs-plus')
+      FileUtils.mkdir_p(config_dir)
+      safe_symlink(File.join(config_dir, 'build.yml'), 'emacs-plus-build.yml')
+
       brew_bundle absolute_path("Brewfile-emacs@#{version}")
       brew_unlink_emacs
       brew_link_emacs version
