@@ -1,10 +1,15 @@
 function my_docker_init() {
   # Symlink Docker Desktop completion files.
   # https://docs.docker.com/desktop/faqs/macfaqs/#zsh
-  if [[ "$OSTYPE" == darwin* ]] && [[ -e /Applications/Docker.app ]] {
+  if [[ "$OSTYPE" == darwin* ]] &&  {
     local docker_app_etc=/Applications/Docker.app/Contents/Resources/etc
-    [[ ! -e $ZSH/completions/_docker && -e $docker_app_etc/docker.zsh-completion ]] && ln -s $docker_app_etc/docker.zsh-completion $ZSH/completions/_docker
-    [[ ! -e $ZSH/completions/_docker-compose && -e $docker_app_etc/docker-compose.zsh-completion ]] && ln -s $docker_app_etc/docker-compose.zsh-completion $ZSH/completions/_docker-compose
+    if [[ -e /Applications/Docker.app ]] {
+      [[ ! -e $ZSH/completions/_docker && -e $docker_app_etc/docker.zsh-completion ]] && ln -s $docker_app_etc/docker.zsh-completion $ZSH/completions/_docker
+      [[ ! -e $ZSH/completions/_docker-compose && -e $docker_app_etc/docker-compose.zsh-completion ]] && ln -s $docker_app_etc/docker-compose.zsh-completion $ZSH/completions/_docker-compose
+    } else {
+      [[ -e $ZSH/completions/_docker ]] && [[ $(readlink $ZSH/completions/_docker) == $docker_app_etc/docker.zsh-completion ]] && rm -f $ZSH/completions/_docker
+      [[ -e $ZSH/completions/_docker-compose ]] && [[ $(readlink $ZSH/completions/_docker-compose) == $docker_app_etc/docker-compose.zsh-completion ]] && rm -f $ZSH/completions/_docker-compose
+    }
   }
 }
 
