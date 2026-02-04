@@ -232,3 +232,11 @@ namespace :brew do
     end
   end
 end
+
+namespace :nvim do
+  task :install => :init do
+    config_dir = File.join(Dir.home, '.config', 'nvim')
+    FileUtils.mkdir_p(File.dirname(config_dir))
+    safe_symlink(config_dir, 'nvim')
+  end
+end

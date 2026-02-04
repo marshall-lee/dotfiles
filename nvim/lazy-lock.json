@@ -1,0 +1,5 @@
+{
+  "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
+  "nvim-lspconfig": { "branch": "master", "commit": "3f58aeca0c6ece8a9fb8782ea3fcb6024f285be3" },
+  "solarized-osaka.nvim": { "branch": "main", "commit": "f0c2f0ba0bd56108d53c9bfae4bb28ff6c67bbdb" }
+}
