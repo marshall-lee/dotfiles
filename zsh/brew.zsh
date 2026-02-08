@@ -21,7 +21,7 @@ function my_brew_init() {
   [[ -z $brew_repo ]] && return
 
   # Cache `brew shellenv` output.
-  if [[ -z $shellenv(#qN.mh-1) ]] {
+  if [[ -z $shellenv(#qN.mh-6) ]] {
     local shellenv_version_line= shellenv_version=
     if [[ -e $shellenv ]] {
       shellenv_version_line=$(head -n 1 $shellenv)

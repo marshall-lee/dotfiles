@@ -14,7 +14,7 @@ function my_compinit() {
     }
   done
 
-  if [[ -n $dumpfile(#qN.mh-1) ]] {
+  if [[ -n $dumpfile(#qN.mh-12) ]] {
     # -C option skips the check and compaudit run
     compinit -i -C -d $dumpfile
   } else {
