@@ -37,6 +37,14 @@ require("lazy").setup({
         local lspconfig = require("lspconfig")
       end
     },
+    {
+      "nvim-telescope/telescope.nvim",
+      version = "*",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      }
+    },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
