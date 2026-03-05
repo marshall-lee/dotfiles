@@ -25,6 +25,7 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
   spec = {
     -- import your plugins
+    { "nvim-lua/plenary.nvim", lazy = true },
     {
       "craftzdog/solarized-osaka.nvim",
       lazy = false,
@@ -44,6 +45,12 @@ require("lazy").setup({
         "nvim-lua/plenary.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       }
+    },
+    {
+      "whonore/Coqtail",
+      ft = { "coq" },
+      config = function()
+      end,
     },
   },
   -- Configure any other settings here. See the documentation for more details.
