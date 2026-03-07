@@ -21,15 +21,15 @@ history = 0
 size = 16.0
 
 [font.normal]
-family = "Iosevka Term"
+family = "Iosevka Term SS06"
 style = "Light Extended"
 
 [font.bold]
-family = "Iosevka Term"
+family = "Iosevka Term SS06"
 style = "Semi-Bold Extended"
 
 [font.italic]
-family = "Iosevka Term"
+family = "Iosevka Term SS06"
 style = "Italic Extended"
 
 [[keyboard.bindings]] # cmd+e -> C-a % (split-window -h in tmux)
