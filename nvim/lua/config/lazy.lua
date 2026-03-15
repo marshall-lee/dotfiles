@@ -20,24 +20,22 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+vim.opt.exrc = true
+vim.opt.secure = true
 
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
     -- import your plugins
     { "nvim-lua/plenary.nvim", lazy = true },
+    { import = "plugins.cmp" },
     {
       "craftzdog/solarized-osaka.nvim",
       lazy = false,
       priority = 1000,
       opts = {},
     },
-    {
-      "neovim/nvim-lspconfig",
-      config = function()
-        local lspconfig = require("lspconfig")
-      end
-    },
+    { import = "plugins.lsp" },
     {
       "nvim-telescope/telescope.nvim",
       version = "*",
@@ -46,7 +44,7 @@ require("lazy").setup({
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       }
     },
-    { import = "plugins.coqtail" }
+    { import = "plugins.coqtail" },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
