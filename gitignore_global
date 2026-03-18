@@ -8,3 +8,4 @@ cabal.project.local
 /vendor/bundle
 /.bundle/bin
 .solargraph.yml
+.nvim.lua
