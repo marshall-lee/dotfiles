@@ -39,6 +39,7 @@ require("lazy").setup({
     { import = "plugins.lsp" },
     { import = "plugins.lsp-ruby" },
     { import = "plugins.lsp-lua" },
+    { import = "plugins.lsp-go" },
     { import = "plugins.telescope" },
     { import = "plugins.gitsigns" },
     { import = "plugins.coqtail" },
