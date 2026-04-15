@@ -36,14 +36,9 @@ require("lazy").setup({
       opts = {},
     },
     { import = "plugins.lsp" },
-    {
-      "nvim-telescope/telescope.nvim",
-      version = "*",
-      dependencies = {
-        "nvim-lua/plenary.nvim",
-        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-      }
-    },
+    { import = "plugins.lsp-ruby" },
+    { import = "plugins.lsp-lua" },
+    { import = "plugins.telescope" },
     { import = "plugins.coqtail" },
   },
   -- Configure any other settings here. See the documentation for more details.
