@@ -22,6 +22,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.opt.exrc = true
 vim.opt.secure = true
+vim.wo.number = true
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -39,6 +40,7 @@ require("lazy").setup({
     { import = "plugins.lsp-ruby" },
     { import = "plugins.lsp-lua" },
     { import = "plugins.telescope" },
+    { import = "plugins.gitsigns" },
     { import = "plugins.coqtail" },
   },
   -- Configure any other settings here. See the documentation for more details.
