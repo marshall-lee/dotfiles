@@ -23,6 +23,9 @@ vim.g.maplocalleader = ","
 vim.opt.exrc = true
 vim.opt.secure = true
 vim.wo.number = true
+vim.wo.cursorline = true
+vim.wo.numberwidth = 2
+vim.wo.signcolumn = "yes"
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -30,12 +33,7 @@ require("lazy").setup({
     -- import your plugins
     { "nvim-lua/plenary.nvim", lazy = true },
     { import = "plugins.cmp" },
-    {
-      "craftzdog/solarized-osaka.nvim",
-      lazy = false,
-      priority = 1000,
-      opts = {},
-    },
+    { import = "plugins.solarized-osaka" },
     { import = "plugins.lsp" },
     { import = "plugins.lsp-ruby" },
     { import = "plugins.lsp-lua" },
