@@ -3,6 +3,7 @@ return {
     "whonore/Coqtail",
     ft = "coq",
     config = function()
+      vim.g.coqtail_nomap = 1
       -- ensure we set mappings only for Coq buffers
       vim.api.nvim_create_autocmd({ "FileType" }, {
         pattern = "coq",
