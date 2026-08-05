@@ -9,13 +9,22 @@ function my_cargo_init() {
 function my_rustup_init() {
   setopt local_options
   setopt extendedglob
+
+  if [[ -n $HOMEBREW_PREFIX ]] && [[ -d $HOMEBREW_PREFIX/opt/rustup ]] {
+    path=($HOMEBREW_PREFIX/opt/rustup/bin $path)
+  }
+
   local rustup_completions=$ZSH/completions/_rustup
   local cargo_completions=$ZSH/completions/_cargo
+  local rust_sysroot=
   if (( ${+commands[rustup]} )) {
     [[ ! -e $rustup_completions ]] && rustup completions zsh rustup > $rustup_completions
     if [[ -z $cargo_completions(#qN@mh-1) ]] && (( ${+commands[rustc]} )) {
       rm -f $cargo_completions
-      ln -s $(rustc --print sysroot)/share/zsh/site-functions/_cargo $cargo_completions
+      rust_sysroot=$(rustc --print sysroot)
+      if [[ -n ${rust_sysroot} ]] {
+        ln -s ${rust_sysroot}/share/zsh/site-functions/_cargo $cargo_completions
+      }
     }
   } elif [[ -e $rustup_completions ]] {
     rm -f $rustup_completions
