@@ -85,6 +85,16 @@ function my_keybindings_init() {
   bindkey -M vicmd "g${${(P)mapping}[E]}" vi-backward-blank-word-end
   bindkey -M vicmd "^${${(P)mapping}[R]}" redo
 
+  bindkey -M viopp "${${(P)mapping}[t]}" vi-find-next-char-skip
+  bindkey -M viopp "${${(P)mapping}[T]}" vi-find-prev-char-skip
+  bindkey -M viopp "${${(P)mapping}[f]}" vi-find-next-char
+  bindkey -M viopp "${${(P)mapping}[F]}" vi-find-prev-char
+  bindkey -M viopp "${${(P)mapping}[i]}W" select-in-blank-word
+  bindkey -M viopp "${${(P)mapping}[i]}a" select-in-shell-word
+  bindkey -M viopp "${${(P)mapping}[i]}w" select-in-word
+  bindkey -M viopp "${${(P)mapping}[j]}" down-line
+  bindkey -M viopp "${${(P)mapping}[k]}" up-line
+
   # Page Up.
   # It is expected that we remap Ctrl+I to Page Up in the terminal emulator.
   # This is because default ansi code for Ctrl+I is ^I which the same as TAB.
