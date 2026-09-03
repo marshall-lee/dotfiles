@@ -2,6 +2,7 @@
 .dir-locals.el
 .vscode/
 .DS_Store
+compile_commands.json
 compile_flags.txt
 *.swp
 cabal.project.local
