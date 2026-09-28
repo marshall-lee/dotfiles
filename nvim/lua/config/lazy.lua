@@ -38,6 +38,7 @@ require("lazy").setup({
     { import = "plugins.lsp-c" },
     { import = "plugins.lsp-ocaml" },
     { import = "plugins.lsp-ruby" },
+    { import = "plugins.lsp-rust" },
     { import = "plugins.lsp-lua" },
     { import = "plugins.lsp-go" },
     { import = "plugins.ocaml" },
