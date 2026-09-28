@@ -36,6 +36,7 @@ require("lazy").setup({
     { import = "plugins.solarized-osaka" },
     { import = "plugins.lsp" },
     { import = "plugins.lsp-c" },
+    { import = "plugins.lsp-java" },
     { import = "plugins.lsp-ocaml" },
     { import = "plugins.lsp-ruby" },
     { import = "plugins.lsp-rust" },
