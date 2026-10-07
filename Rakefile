@@ -109,7 +109,8 @@ task :alacritty => :init do
   unless Dir.exist?(themes_dir)
     github_clone 'alacritty/alacritty-theme', themes_dir
   end
-  safe_symlink File.join(config_dir, 'alacritty.toml'), 'alacritty.toml'
+  safe_symlink File.join(config_dir, 'shell.sh'), File.join('alacritty', 'shell.sh')
+  safe_symlink File.join(config_dir, 'alacritty.toml'), File.join('alacritty', 'alacritty.toml')
 end
 
 desc 'Installs tmux config'
