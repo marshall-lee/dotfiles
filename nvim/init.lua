@@ -1,6 +1,6 @@
 require("config.lazy")
 require("config.indent")
-require("config.langmap")
+require("config.layout")
 require("config.python3")
 
 vim.cmd[[colorscheme solarized-osaka]]

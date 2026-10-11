@@ -95,4 +95,4 @@ chars = "\u001bs"
 [[keyboard.bindings]] # ctrl+i -> PgUp (up-line-or-beginning-search in zsh)
 key = "i"
 mods = "Control"
-chars = "\u001b[5~"
+chars = "\u001b[105;5u"

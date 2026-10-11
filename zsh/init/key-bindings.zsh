@@ -95,14 +95,16 @@ function my_keybindings_init() {
   bindkey -M viopp "${${(P)mapping}[j]}" down-line
   bindkey -M viopp "${${(P)mapping}[k]}" up-line
 
-  # Page Up.
-  # It is expected that we remap Ctrl+I to Page Up in the terminal emulator.
-  # This is because default ansi code for Ctrl+I is ^I which the same as TAB.
+  # Ctrl+I / Page Up.
   if [[ -n ${widgets[up-line-or-beginning-search]} ]] {
+    bindkey -M vicmd "\e[105;5u" up-line-or-beginning-search
+    bindkey -M viins "\e[105;5u" up-line-or-beginning-search
     bindkey -M vicmd "^[[5~" up-line-or-beginning-search
     bindkey -M viins "^[[5~" up-line-or-beginning-search
   } else {
-    bindkey -M vicmd "^[[5~" up-line-or-history # Page Up key remapped from Ctrl-I in alacritty config.
+    bindkey -M vicmd "\e[105;5u" up-line-or-history
+    bindkey -M viins "\e[105;5u" up-line-or-history
+    bindkey -M vicmd "^[[5~" up-line-or-history
     bindkey -M viins "^[[5~" up-line-or-history
   }
 
@@ -110,9 +112,13 @@ function my_keybindings_init() {
   if [[ -n ${widgets[up-line-or-beginning-search]} ]] {
     bindkey -M vicmd "^${${(P)mapping}[J]}" down-line-or-beginning-search
     bindkey -M viins "^${${(P)mapping}[J]}" down-line-or-beginning-search
+    bindkey -M vicmd "^[[6~" down-line-or-beginning-search
+    bindkey -M viins "^[[6~" down-line-or-beginning-search
   } else {
     bindkey -M vicmd "^${${(P)mapping}[J]}" down-line-or-history
     bindkey -M viins "^${${(P)mapping}[J]}" down-line-or-history
+    bindkey -M vicmd "^[[6~" down-line-or-history
+    bindkey -M viins "^[[6~" down-line-or-history
   }
 
   # bindkey -M viins "^G" vi-ins
@@ -120,15 +126,19 @@ function my_keybindings_init() {
   bindkey -M viins "^[m" copy-prev-shell-word
   bindkey -M viins "^F" history-incremental-search-backward
   bindkey -M viins "^S" history-incremental-search-forward
-  bindkey -M viins "^O" clear-screen
+  bindkey -M viins "^${${(P)mapping}[L]}" clear-screen
 
   # Emacs-style hybrid bindings
+  bindkey -M viins "^A" beginning-of-line
   bindkey -M viins "^B" vi-backward-char
   bindkey -M viins "^${${(P)mapping}[F]}" vi-forward-char
-  bindkey -M viins "^${${(P)mapping}[D]}" end-of-line
+  bindkey -M viins "^${${(P)mapping}[E]}" end-of-line
   bindkey -M viins "^G" send-break
   bindkey -M viins "^[b" backward-word
   bindkey -M viins "^[${${(P)mapping}[f]}" forward-word
+
+  # Terminate the terminal by pressing Ctrl+D
+  stty eof "^${${(P)mapping}[D]}"
 }
 
 my_keybindings_init
