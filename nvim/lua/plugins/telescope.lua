@@ -60,9 +60,10 @@ return {
       })
     end, { desc = 'Telescope find files' })
     vim.keymap.set('n', '<leader>fF', function()
+      local name = vim.api.nvim_buf_get_name(0)
       file_browser.file_browser({
         prompt_title = "Project File Browser",
-        path = "%:p:h",
+        path = vim.fn.isdirectory(name) == 1 and name or vim.fs.dirname(name),
         select_buffer = true,
       })
     end, { desc = "Telescope find files in buffer's directory" })
@@ -73,7 +74,7 @@ return {
     end, { desc = 'Telescope live grep' })
     vim.keymap.set('n', '<leader>fG', function()
       local Path = require("plenary.path")
-      local path = Path:new(vim.fn.expand('%:p'))
+      local path = Path:new(vim.api.nvim_buf_get_name(0))
       if not path:exists() then path = Path:new(vim.loop.cwd()) end
       local gitroot = vim.tbl_filter(function(parent)
         return Path:new(parent .. '/.git'):is_dir()
