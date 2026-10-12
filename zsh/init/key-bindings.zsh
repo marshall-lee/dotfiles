@@ -36,6 +36,8 @@ function my_keybindings_init() {
     [K]=I
     [l]=o
     [L]=O
+    [m]=m
+    [M]=M
     [n]=p
     [N]=P
     [o]=l
@@ -44,6 +46,8 @@ function my_keybindings_init() {
     [P]=":"
     [r]=f
     [R]=F
+    [s]=s
+    [S]=S
     [t]=k
     [T]=K
     [y]=j
@@ -123,9 +127,23 @@ function my_keybindings_init() {
 
   # bindkey -M viins "^G" vi-ins
   bindkey -M viins "^[." insert-last-word
-  bindkey -M viins "^[m" copy-prev-shell-word
-  bindkey -M viins "^F" history-incremental-search-backward
-  bindkey -M viins "^S" history-incremental-search-forward
+  bindkey -M viins "^[${${(P)mapping}[m]}" copy-prev-shell-word
+  bindkey -M viins "^${${(P)mapping}[R]}" history-incremental-search-backward
+  bindkey -M viins "^${${(P)mapping}[S]}" history-incremental-search-forward
+
+  # ESC in bck-i-search: exit the search, keeping the found line, and enter
+  # normal mode. Unbound, ESC falls through to vi-cmd-mode, which inside a search
+  # only switches the keymap the search uses. Normal mode has to be entered after
+  # the search returns, because zsh restores the keymap when the search ends.
+  bindkey -M isearch "^[" accept-search
+  function my_isearch() {
+    zle .$WIDGET
+    local ret=$?
+    [[ $KEYS == $'\e' ]] && zle vi-cmd-mode
+    return $ret
+  }
+  zle -N history-incremental-search-backward my_isearch
+  zle -N history-incremental-search-forward my_isearch
   bindkey -M viins "^${${(P)mapping}[L]}" clear-screen
 
   # Emacs-style hybrid bindings
