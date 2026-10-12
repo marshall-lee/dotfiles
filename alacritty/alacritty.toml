@@ -35,37 +35,37 @@ style = "Italic Extended"
 [[keyboard.bindings]] # cmd+e -> C-a % (split-window -h in tmux)
 key = "e"
 mods = "Command"
-chars = "\u0001%"
+chars = "\u0000%"
 
 [[keyboard.bindings]] # cmd+shift+e -> C-a " (split-window -v in tmux)
 key = "e"
 mods = "Command|Shift"
-chars = "\u0001\""
+chars = "\u0000\""
 
 [[keyboard.bindings]] # cmd+w -> C-a q (kill-pane in tmux)
 key = "w"
 mods = "Command"
-chars = "\u0001q"
+chars = "\u0000q"
 
 [[keyboard.bindings]] # cmd+n -> C-a Right
 key = "o"
 mods = "Command"
-chars = "\u0001\u001b[C"
+chars = "\u0000\u001b[C"
 
 [[keyboard.bindings]] # cmd+n -> C-a Left
 key = "y"
 mods = "Command"
-chars = "\u0001\u001b[D"
+chars = "\u0000\u001b[D"
 
 [[keyboard.bindings]] # cmd+n -> C-a Down
 key = "n"
 mods = "Command"
-chars = "\u0001\u001b[B"
+chars = "\u0000\u001b[B"
 
 [[keyboard.bindings]] # cmd+i -> C-a Up
 key = "i"
 mods = "Command"
-chars = "\u0001\u001b[A"
+chars = "\u0000\u001b[A"
 
 [[keyboard.bindings]]
 key = "o"
