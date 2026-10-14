@@ -144,9 +144,10 @@ function my_keybindings_init() {
   }
   zle -N history-incremental-search-backward my_isearch
   zle -N history-incremental-search-forward my_isearch
-  bindkey -M viins "^${${(P)mapping}[L]}" clear-screen
 
   # Emacs-style hybrid bindings
+  bindkey -M viins "^${${(P)mapping}[L]}" clear-screen
+  bindkey -M viins "^${${(P)mapping}[O]}" accept-line-and-down-history
   bindkey -M viins "^A" beginning-of-line
   bindkey -M viins "^B" vi-backward-char
   bindkey -M viins "^${${(P)mapping}[F]}" vi-forward-char
