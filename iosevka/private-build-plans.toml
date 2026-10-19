@@ -1,0 +1,42 @@
+# Iosevka Term SS06 (Liberation Mono style) with two changes: the Extended
+# width is the normal one, and Bold is drawn with the SemiBold design.
+# Option reference: https://github.com/be5invis/Iosevka/blob/main/doc/custom-build.md
+
+[buildPlans.IosevkaTermSS06X]
+family = "Iosevka Term SS06X"
+spacing = "term"
+noCvSs = true
+
+[buildPlans.IosevkaTermSS06X.variants]
+inherits = "ss06"
+
+# Only the four styles terminals and editors ask for.
+[buildPlans.IosevkaTermSS06X.weights.Regular]
+shape = 400
+menu = 400
+css = 400
+
+[buildPlans.IosevkaTermSS06X.weights.Bold]
+shape = 600
+menu = 700
+css = 700
+
+# Iosevka's Normal is 500/1000 em wide, Extended is 600 (as wide as DejaVu or
+# Liberation Mono). Use the Extended shape under the Normal name, so style
+# names stay plain "Regular", "Bold", etc.
+[buildPlans.IosevkaTermSS06X.widths.Normal]
+shape = 600
+menu = 5
+css = "normal"
+
+[buildPlans.IosevkaTermSS06X.slopes.Upright]
+angle = 0
+shape = "upright"
+menu = "upright"
+css = "normal"
+
+[buildPlans.IosevkaTermSS06X.slopes.Italic]
+angle = 9.4
+shape = "italic"
+menu = "italic"
+css = "italic"

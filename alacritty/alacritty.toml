@@ -20,17 +20,10 @@ history = 0
 [font]
 size = 16.0
 
+# Built from iosevka/ in this repo. Bold, italic and bold italic use the
+# same family with Alacritty's default style names.
 [font.normal]
-family = "Iosevka Term SS06"
-style = "Light Extended"
-
-[font.bold]
-family = "Iosevka Term SS06"
-style = "Semi-Bold Extended"
-
-[font.italic]
-family = "Iosevka Term SS06"
-style = "Italic Extended"
+family = "IosevkaTermSS06X Nerd Font Mono"
 
 [[keyboard.bindings]] # cmd+e -> C-a % (split-window -h in tmux)
 key = "e"
