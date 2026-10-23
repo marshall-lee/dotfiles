@@ -25,65 +25,120 @@ size = 16.0
 [font.normal]
 family = "IosevkaTermSS06X Nerd Font Mono"
 
-[[keyboard.bindings]] # cmd+e -> C-a % (split-window -h in tmux)
+# Cmd shortcuts (Super on Linux) are tmux hotkeys, see tmux.conf. tmux can't see
+# the Cmd key, so these only encode each shortcut as
+# "\e[<key code>;<1 + modifiers>~", with Shift 1, Alt 2 and Super 8.
+
+[[keyboard.bindings]] # cmd+t: new tab
+key = "t"
+mods = "Command"
+chars = "\u001b[116;9~"
+
+[[keyboard.bindings]] # cmd+opt+o: next tab
+key = "o"
+mods = "Command|Option"
+chars = "\u001b[111;11~"
+
+[[keyboard.bindings]] # cmd+opt+y: previous tab
+key = "y"
+mods = "Command|Option"
+chars = "\u001b[121;11~"
+
+[[keyboard.bindings]] # cmd+e: split right
 key = "e"
 mods = "Command"
-chars = "\u0000%"
+chars = "\u001b[101;9~"
 
-[[keyboard.bindings]] # cmd+shift+e -> C-a " (split-window -v in tmux)
+[[keyboard.bindings]] # cmd+shift+e: split down
 key = "e"
 mods = "Command|Shift"
-chars = "\u0000\""
+chars = "\u001b[101;10~"
 
-[[keyboard.bindings]] # cmd+w -> C-a q (kill-pane in tmux)
+[[keyboard.bindings]] # cmd+w: close the pane
 key = "w"
 mods = "Command"
-chars = "\u0000q"
+chars = "\u001b[119;9~"
 
-[[keyboard.bindings]] # cmd+n -> C-a Right
-key = "o"
-mods = "Command"
-chars = "\u0000\u001b[C"
-
-[[keyboard.bindings]] # cmd+n -> C-a Left
+[[keyboard.bindings]] # cmd+y: pane to the left
 key = "y"
 mods = "Command"
-chars = "\u0000\u001b[D"
+chars = "\u001b[121;9~"
 
-[[keyboard.bindings]] # cmd+n -> C-a Down
+[[keyboard.bindings]] # cmd+n: pane below
 key = "n"
 mods = "Command"
-chars = "\u0000\u001b[B"
+chars = "\u001b[110;9~"
 
-[[keyboard.bindings]] # cmd+i -> C-a Up
+[[keyboard.bindings]] # cmd+i: pane above
 key = "i"
 mods = "Command"
-chars = "\u0000\u001b[A"
+chars = "\u001b[105;9~"
 
-[[keyboard.bindings]]
+[[keyboard.bindings]] # cmd+o: pane to the right
 key = "o"
-mods = "Command|Option"
-action = "SelectNextTab"
+mods = "Command"
+chars = "\u001b[111;9~"
 
-[[keyboard.bindings]]
-key = "y"
-mods = "Command|Option"
-action = "SelectPreviousTab"
-
-[[keyboard.bindings]]
-key = "Tab"
-mods = "Control"
-action = "SelectNextTab"
-
-[[keyboard.bindings]]
-key = "Tab"
-mods = "Control|Shift"
-action = "SelectPreviousTab"
-
-[[keyboard.bindings]] # cmd+f -> M-s (search-backward in tmux)
+[[keyboard.bindings]] # cmd+f: search the scrollback
 key = "f"
 mods = "Command"
-chars = "\u001bs"
+chars = "\u001b[102;9~"
+
+[[keyboard.bindings]] # cmd+1: tab 1
+key = "1"
+mods = "Command"
+chars = "\u001b[49;9~"
+
+[[keyboard.bindings]] # cmd+2: tab 2
+key = "2"
+mods = "Command"
+chars = "\u001b[50;9~"
+
+[[keyboard.bindings]] # cmd+3: tab 3
+key = "3"
+mods = "Command"
+chars = "\u001b[51;9~"
+
+[[keyboard.bindings]] # cmd+4: tab 4
+key = "4"
+mods = "Command"
+chars = "\u001b[52;9~"
+
+[[keyboard.bindings]] # cmd+5: tab 5
+key = "5"
+mods = "Command"
+chars = "\u001b[53;9~"
+
+[[keyboard.bindings]] # cmd+6: tab 6
+key = "6"
+mods = "Command"
+chars = "\u001b[54;9~"
+
+[[keyboard.bindings]] # cmd+7: tab 7
+key = "7"
+mods = "Command"
+chars = "\u001b[55;9~"
+
+[[keyboard.bindings]] # cmd+8: tab 8
+key = "8"
+mods = "Command"
+chars = "\u001b[56;9~"
+
+[[keyboard.bindings]] # cmd+9: last tab
+key = "9"
+mods = "Command"
+chars = "\u001b[57;9~"
+
+# Ctrl+Tab and Ctrl+Shift+Tab as CSI u, so tmux can tell them apart from Tab.
+[[keyboard.bindings]] # ctrl+tab: next tab
+key = "Tab"
+mods = "Control"
+chars = "\u001b[9;5u"
+
+[[keyboard.bindings]] # ctrl+shift+tab: previous tab
+key = "Tab"
+mods = "Control|Shift"
+chars = "\u001b[9;6u"
 
 [[keyboard.bindings]] # ctrl+i -> PgUp (up-line-or-beginning-search in zsh)
 key = "i"
