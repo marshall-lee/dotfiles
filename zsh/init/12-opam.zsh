@@ -14,7 +14,7 @@ function my_opam_init() {
 
   # Cache `opam env` output.
   if [[ -z "$opamenv"(#qN.mh-6) ]] {
-    command opam env --shell=zsh | grep -v '^PATH=' > "$opamenv"
+    "$opambin" env --shell=zsh | grep -v '^PATH=' > "$opamenv"
   }
 
   source "$opamenv"

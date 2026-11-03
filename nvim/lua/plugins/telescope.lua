@@ -19,6 +19,12 @@ return {
   config = function()
     local telescope = require("telescope")
 
+    -- With fd, find files like FZF_DEFAULT_COMMAND in zsh/init/32-fzf.zsh does.
+    local find_command
+    if vim.fn.executable("fd") == 1 then
+      find_command = { "fd", "--type", "f", "--hidden", "--follow", "--exclude", ".git/" }
+    end
+
     telescope.setup({
       pickers = {
         buffers = {
@@ -29,6 +35,7 @@ return {
         },
         find_files = {
           theme = "ivy",
+          find_command = find_command,
         },
       },
       extensions = {
