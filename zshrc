@@ -35,7 +35,7 @@ function my_start() {
     antidote_enabled=true
     autoload -Uz antidote
     zstyle ':antidote:bundle:*' zcompile 'yes'
-    if [[ "$script_dir/zsh_plugins.txt" -nt "$ZSH/my.zsh" ]] {
+    if [[ "$script_dir/zsh_plugins.txt" -nt "$ZSH/my.zsh" || "$antidote_path" -nt "$ZSH/my.zsh" ]] {
       need_compile=true
     }
   }
