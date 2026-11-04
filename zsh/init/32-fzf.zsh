@@ -26,13 +26,24 @@ function my_fzf_init() {
   # directories. ** passes . for the current directory, and fd prints
   # ./src/main.rb for it, so it gets no path: then it's src/main.rb.
   if (( ${+commands[fd]} )) {
-    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git/'
     function _fzf_compgen_path() {
-      fd --hidden --follow --exclude .git/ . ${1:#.}
+      fd --hidden --follow --exclude .git/ . "${1:#.}"
     }
     function _fzf_compgen_dir() {
-      fd --type d --follow --exclude .git/ . ${1:#.}
+      fd --type d --follow --exclude .git/ . "${1:#.}"
     }
+  } elif (( ${+commands[rg]} )) {
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -g "!.git/"'
+    function _fzf_compgen_path() {
+      rg --files --hidden --follow -g "!.git/" . "${1:#.}"
+    }
+    function _fzf_compgen_dir() {
+      rg --files --type d --hidden --follow -g "!.git/" . "${1:#.}"
+    }
+  } else {
+    # Last resort: use fzf's built-in walker
+    export FZF_DEFAULT_OPTS='--walker=file,follow,hidden --walker-skip=.git'
   }
 }
 
