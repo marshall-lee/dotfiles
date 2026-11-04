@@ -44,8 +44,10 @@ function my_start() {
     echo "Compiling the my.zsh bundle..."
     if $antidote_enabled; then
       antidote bundle <"$script_dir/zsh_plugins.txt" >| "$ZSH/my.zsh"
+      echo >> "$ZSH/my.zsh"
+    else
+      rm -f "$ZSH/my.zsh"
     fi
-    echo >> "$ZSH/my.zsh"
     cat $my_sources >> "$ZSH/my.zsh"
     zcompile "$ZSH/my.zsh"
   fi
