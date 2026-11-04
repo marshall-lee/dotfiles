@@ -15,6 +15,7 @@ function my_fzf_init() {
   # Cache `fzf --zsh` output.
   if [[ -z "$fzfzsh"(#qN.mh-6) ]] {
     "$fzfbin" --zsh > "$fzfzsh"
+    zcompile "$fzfzsh"
   }
 
   # Only ** completion, without the Ctrl-T, Ctrl-R and Alt-C key bindings.
