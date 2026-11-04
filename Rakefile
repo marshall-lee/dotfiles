@@ -33,9 +33,10 @@ def safe_symlink(path, filename)
   FileUtils.ln_s srcpath, path if need_link
 end
 
-def git_clone(repo, to, branch: nil)
+def git_clone(repo, to, branch: nil, shallow: true)
   cmd = ['git', 'clone']
   cmd.push '--branch', branch if branch
+  cmd.push '--depth', '1' if shallow
   cmd.push '--', repo, to
   system *cmd, exception: true
 end
@@ -82,6 +83,8 @@ desc 'Installs Zsh'
 task :zsh => :init do
   safe_symlink File.join(Dir.home, '.zshrc'), 'zshrc'
   safe_symlink File.join(Dir.home, '.zsh'), 'zsh'
+  antidote_path=File.join(Dir.home, '.antidote')
+  github_clone "mattmc3/antidote", antidote_path
 end
 
 desc 'Installs Powerline fonts'
@@ -132,7 +135,7 @@ namespace :spacemacs do
         backup destpath
       end
     end
-    github_clone 'syl20bnr/spacemacs', destpath, branch: 'develop' if need_clone
+    github_clone 'syl20bnr/spacemacs', destpath, branch: 'develop', shallow: false if need_clone
   end
 
   desc "Sets up my weird config (don't do this)"

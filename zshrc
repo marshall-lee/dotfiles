@@ -2,6 +2,7 @@
 
 function my_start() {
   local -a my_sources
+  local script_dir="${0:A:h}/zsh"
   my_sources=($ZSH/lib.zsh)
   if [[ -f $ZSH/pre-init.zsh ]] {
     my_sources=($my_sources $ZSH/pre-init.zsh)
@@ -26,11 +27,28 @@ function my_start() {
   } else {
     need_compile=true
   }
+
+  local antidote_path="$HOME/.antidote"
+  local antidote_enabled=false
+  if [[ -d "$antidote_path" ]] {
+    fpath=("$antidote_path/functions" $fpath)
+    antidote_enabled=true
+    autoload -Uz antidote
+    zstyle ':antidote:bundle:*' zcompile 'yes'
+    if [[ "$script_dir/zsh_plugins.txt" -nt "$ZSH/my.zsh" ]] {
+      need_compile=true
+    }
+  }
+
   if $need_compile; then
-    echo "Compiling the sources..."
-    cat $my_sources > $ZSH/my.zsh
-    zcompile $ZSH/my.zsh
+    echo "Compiling the my.zsh bundle..."
+    if $antidote_enabled; then
+      antidote bundle <"$script_dir/zsh_plugins.txt" >| "$ZSH/my.zsh"
+    fi
+    echo >> "$ZSH/my.zsh"
+    cat $my_sources >> "$ZSH/my.zsh"
+    zcompile "$ZSH/my.zsh"
   fi
-  source $ZSH/my.zsh
+  source "$ZSH/my.zsh"
 }
 my_start
