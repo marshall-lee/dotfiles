@@ -36,6 +36,7 @@ require("lazy").setup({
     { import = "plugins.solarized-osaka" },
     { import = "plugins.lsp" },
     { import = "plugins.lsp-c" },
+    { import = "plugins.lsp-coq" },
     { import = "plugins.lsp-java" },
     { import = "plugins.lsp-ocaml" },
     { import = "plugins.lsp-ruby" },
@@ -45,7 +46,6 @@ require("lazy").setup({
     { import = "plugins.ocaml" },
     { import = "plugins.telescope" },
     { import = "plugins.gitsigns" },
-    { import = "plugins.coqtail" },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
