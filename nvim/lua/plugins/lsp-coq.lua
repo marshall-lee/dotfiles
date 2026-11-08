@@ -34,6 +34,30 @@ return {
       local coq_lsp = require("coq-lsp")
       coq_lsp.setup(opts)
 
+      -- Cache for statement spans per buffer
+      local span_cache = {}
+
+      -- Namespace for "checked" highlighting (everything before cursor)
+      local checked_ns = vim.api.nvim_create_namespace("coq-checked")
+
+      -- Setup per-buffer state
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "coq",
+        callback = function(ev)
+          local bufnr = ev.buf
+
+          -- Buffer-local invalidation
+          vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "BufReadPost" }, {
+            buffer = bufnr,
+            callback = function()
+              span_cache[bufnr] = nil
+              -- Clear highlights on edit since spans may change
+              vim.api.nvim_buf_clear_namespace(bufnr, checked_ns, 0, -1)
+            end,
+          })
+        end,
+      })
+
       -- Statement navigation.
       --
       -- A Coq program is a sequence of statements, each terminated by ".",
@@ -47,6 +71,11 @@ return {
 
       -- Fetch the list of statement spans from the server.
       local function get_spans(bufnr)
+        -- Check cache first
+        if span_cache[bufnr] then
+          return span_cache[bufnr]
+        end
+
         local client = vim.lsp.get_clients({ bufnr = bufnr, name = "coq_lsp" })[1]
         if not client then
           vim.notify("coq-lsp is not attached (try :LspStart)", vim.log.levels.WARN)
@@ -61,12 +90,22 @@ return {
         if type(doc) ~= "table" or type(doc.spans) ~= "table" then
           return nil
         end
+
+        -- Cache the result
+        span_cache[bufnr] = doc.spans
         return doc.spans
       end
 
       -- Convert an LSP position { line (0-based), character } to a Neovim
-      -- cursor { line (1-based), col (0-based) }. Assumes ASCII (typical for
-      -- Coq), so the character offset equals the byte offset.
+      -- position for vim.hl.range: { line (0-based), col (0-based) }.
+      -- vim.hl.range uses 0-based lines!
+      local function pos_to_hl(bufnr, pos)
+        local line_text = vim.api.nvim_buf_get_lines(bufnr, pos.line, pos.line + 1, false)[1] or ""
+        return { pos.line, math.min(pos.character, #line_text) }
+      end
+
+      -- Convert an LSP position { line (0-based), character } to a Neovim
+      -- cursor { line (1-based), col (0-based) } for vim.api.nvim_win_set_cursor.
       local function pos_to_cursor(bufnr, pos)
         local line_text = vim.api.nvim_buf_get_lines(bufnr, pos.line, pos.line + 1, false)[1] or ""
         return { pos.line + 1, math.min(pos.character, #line_text) }
@@ -77,8 +116,37 @@ return {
         return a_line > b_line or (a_line == b_line and a_col > b_col)
       end
 
+      -- Highlight everything from start of file to cursor as "checked"
+      local function update_checked_highlight(bufnr)
+        local spans = get_spans(bufnr)
+        if not spans or #spans == 0 then
+          return
+        end
+
+        vim.api.nvim_buf_clear_namespace(bufnr, checked_ns, 0, -1)
+
+        local win_cursor = vim.api.nvim_win_get_cursor(0)
+        local cur_line = win_cursor[1] - 1  -- 0-based line
+        local cur_col = win_cursor[2]       -- 0-based col
+
+        -- Find the end position of the last completed statement (before/at cursor)
+        local highlight_end = { 0, 0 }  -- Default to start of file
+        for _, span in ipairs(spans) do
+          local end_pos = span.range["end"]
+          -- Check if this statement ends before or at cursor
+          if end_pos.line < cur_line or (end_pos.line == cur_line and end_pos.character <= cur_col) then
+            highlight_end = { end_pos.line, end_pos.character }
+          end
+        end
+
+        -- Highlight from start of file to end of last completed statement
+        if highlight_end[1] > 0 or highlight_end[2] > 0 then
+          vim.hl.range(bufnr, checked_ns, "CoqtailChecked", { 0, 0 }, highlight_end, { priority = vim.hl.priorities.user })
+        end
+      end
+
       local function jump(direction)
-        local bufnr = 0
+        local bufnr = vim.api.nvim_get_current_buf()
         local spans = get_spans(bufnr)
         if not spans or #spans == 0 then
           return
@@ -112,23 +180,51 @@ return {
         end
 
         vim.api.nvim_win_set_cursor(0, pos_to_cursor(bufnr, target))
+        update_checked_highlight(bufnr)
+      end
+
+      -- Debounce timer for cursor-based highlight updates
+      local highlight_timer = nil
+      local function update_checked_debounced()
+        if highlight_timer then
+          highlight_timer:stop()
+        end
+        if not highlight_timer then
+          highlight_timer = vim.uv.new_timer()
+        end
+        highlight_timer:start(100, 0, function()
+          vim.schedule(function()
+            local bufnr = vim.api.nvim_get_current_buf()
+            if vim.bo[bufnr].filetype == "coq" then
+              update_checked_highlight(bufnr)
+            end
+          end)
+        end)
       end
 
       -- Buffer-local keybindings, matching the old Coqtail layout.
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "coq",
-        callback = function()
+        callback = function(ev)
+          local bufnr = ev.buf
+
+          -- Update "checked" highlight on cursor movement (debounced)
+          vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+            buffer = bufnr,
+            callback = update_checked_debounced,
+          })
+
           local opts = { noremap = true, silent = true, buffer = true }
           vim.keymap.set("n", "<localleader>]", function() jump("next") end, { desc = "Next Coq statement" })
           vim.keymap.set("n", "<localleader>[", function() jump("prev") end, { desc = "Previous Coq statement" })
           vim.keymap.set("n", "<localleader>i", function()
-            local bufnr = 0
+            local bufnr = vim.api.nvim_get_current_buf()
             local client = vim.lsp.get_clients({ bufnr = bufnr, name = "coq_lsp" })[1]
             if not client then
               vim.notify("coq-lsp not attached", vim.log.levels.WARN)
               return
             end
-            local wrapper = require("coq-lsp").clients[client.id]
+            local wrapper = coq_lsp.clients[client.id]
             if not wrapper then
               vim.notify("coq-lsp client wrapper not found", vim.log.levels.WARN)
               return
