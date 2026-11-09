@@ -121,6 +121,13 @@ task :tmux => :init do
   safe_symlink File.join(Dir.home, ".tmux.conf"), "tmux.conf"
 end
 
+desc 'Installs Hammerspoon config'
+task :hammerspoon => :init do
+  # The whole folder, so init.lua can require the files next to it. The Spoons
+  # Hammerspoon installs there are in its .gitignore.
+  safe_symlink File.join(Dir.home, '.hammerspoon'), 'hammerspoon'
+end
+
 namespace :spacemacs do
   desc 'Installs Spacemacs'
   task :install => :init do

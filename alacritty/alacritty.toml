@@ -10,6 +10,15 @@ shell = { program = "/bin/sh", args = ["-c", "source $HOME/.config/alacritty/she
 dynamic_padding = true
 dynamic_title = true
 option_as_alt = "Both"
+# No title bar. On macOS it's see-through and flickers as other apps hide.
+decorations = "None"
+opacity = 0.95
+startup_mode = "Maximized"
+
+# Opacity applies to colored backgrounds too, like tmux's inactive panes, not
+# only to the terminal's default one.
+[colors]
+transparent_background_colors = true
 
 [mouse]
 hide_when_typing = true
