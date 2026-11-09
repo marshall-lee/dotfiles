@@ -50,6 +50,16 @@ return {
         row = 0,
         col = 1
       },
+      on_attach = function(bufnr)
+        local gs = require('gitsigns')
+        -- In diff mode ]c and [c already jump between changes, so keep them there.
+        vim.keymap.set('n', ']c', function()
+          if vim.wo.diff then vim.cmd.normal({ ']c', bang = true }) else gs.nav_hunk('next') end
+        end, { buffer = bufnr, desc = 'Next git hunk' })
+        vim.keymap.set('n', '[c', function()
+          if vim.wo.diff then vim.cmd.normal({ '[c', bang = true }) else gs.nav_hunk('prev') end
+        end, { buffer = bufnr, desc = 'Previous git hunk' })
+      end,
     }
   end,
 }

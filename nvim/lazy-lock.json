@@ -1,5 +1,5 @@
 {
-  "Coqtail": { "branch": "main", "commit": "93deeb6dd0ef30c67574f68a657786e90e806f76" },
+  "Coqtail": { "branch": "main", "commit": "806008396394664c341fe79ac96ef775942cfbe3" },
   "cmp-buffer": { "branch": "main", "commit": "b74fab3656eea9de20a9b8116afa3cfc4ec09657" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "cd4ee08a988deb47ac3726f418fb27fe1a95729d" },
   "cmp-path": { "branch": "main", "commit": "c642487086dbd9a93160e1679a1327be111cbc25" },
