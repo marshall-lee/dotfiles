@@ -1,3 +1,5 @@
+local cargo_target = vim.env.CARGO_BUILD_TARGET
+
 return {
   "neovim/nvim-lspconfig",
   opts = {
@@ -6,7 +8,10 @@ return {
         settings = {
           ["rust-analyzer"] = {
             check = { command = "clippy" },
-            cargo = { allFeatures = true },
+            cargo = vim.tbl_extend("force",
+              { allFeatures = true },
+              cargo_target and { target = cargo_target } or {}
+            ),
           },
         },
       },
