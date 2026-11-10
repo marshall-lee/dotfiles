@@ -4,7 +4,6 @@ return {
   priority = 1000,
   opts = {},
   config = function()
-    print("configging")
     require("solarized-osaka").setup({
       on_highlights = function(hl, c)
         local prompt = "NONE"

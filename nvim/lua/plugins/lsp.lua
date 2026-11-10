@@ -77,7 +77,46 @@ return {
           local bufdir = vim.fs.normalize(vim.fs.dirname(filename))
           local bufdir_trailing_slash = bufdir .. "/"
           local new_config = vim.deepcopy(vim.lsp.config[server])
-          if new_config.root_markers then
+
+          -- Resolve root_dir callback to fix E729 in healthcheck
+          if type(new_config.root_dir) == "function" then
+            local resolved_root = nil
+            local done = false
+            local pending_callbacks = {}
+
+            -- Start resolution ONCE
+            new_config.root_dir(ev.buf, function(root_dir)
+              resolved_root = root_dir
+              done = true
+              -- Fire any pending callbacks
+              for _, cb in ipairs(pending_callbacks) do
+                cb(root_dir)
+              end
+              pending_callbacks = {}
+            end)
+
+            -- Optimistic wait (2 seconds)
+            local resolved_quickly = vim.wait(2000, function() return done end, 100)
+
+            if resolved_quickly then
+              -- Fast resolution - use the string directly
+              new_config.root_dir = resolved_root
+            else
+              -- Slow resolution - warn and wrap in lazy resolver
+              vim.notify("⚠️ " .. server .. " workspace resolution is slow...", vim.log.levels.WARN, { id = "lsp_root_resolve" })
+              
+              -- Hijack root_dir to a wrapper that uses the SAME in-progress resolution
+              new_config.root_dir = function(bufnr, on_dir)
+                if done then
+                  -- Already resolved
+                  on_dir(resolved_root)
+                else
+                  -- Still resolving - queue callback (doesn't start a new resolution)
+                  table.insert(pending_callbacks, on_dir)
+                end
+              end
+            end
+          elseif new_config.root_markers then
             new_config.root_dir = vim.fs.root(ev.buf, new_config.root_markers)
             new_config.root_markers = nil
           end
