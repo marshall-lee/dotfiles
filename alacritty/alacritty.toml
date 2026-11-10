@@ -138,6 +138,16 @@ key = "9"
 mods = "Command"
 chars = "\u001b[57;9~"
 
+[[keyboard.bindings]] # cmd+v: paste
+key = "v"
+mods = "Command"
+action = "Paste"
+
+[[keyboard.bindings]] # cmd+q: quit
+key = "q"
+mods = "Command"
+action = "Quit"
+
 # Ctrl+Tab and Ctrl+Shift+Tab as CSI u, so tmux can tell them apart from Tab.
 [[keyboard.bindings]] # ctrl+tab: next tab
 key = "Tab"
